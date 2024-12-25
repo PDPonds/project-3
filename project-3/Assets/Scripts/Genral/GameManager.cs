@@ -1,11 +1,15 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+
     [Header("===== Init On Game Start ======")]
     [SerializeField] GameObject personPrefab;
     [SerializeField] GameObject cameraPrefab;
-
+    [Header("===== Player =====")]
+    [HideInInspector] public bool isRunning;
     [Header("===== Input =====")]
     [SerializeField] LayerMask mousePosMask;
     [HideInInspector] public Vector2 mousePos;

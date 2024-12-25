@@ -2,16 +2,19 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    float curSpeed = 5f;
     Vector3 moveDir;
     Rigidbody rb;
-    
+    PersonManager personManager;
+
     [SerializeField] float rotationSpeed;
 
     public void Setup()
     {
         rb = GetComponent<Rigidbody>();
+        personManager = GetComponent<PersonManager>();
     }
+
+    #region Movement
 
     private void Update()
     {
@@ -21,12 +24,11 @@ public class PlayerManager : MonoBehaviour
 
     void MoveHandle()
     {
-
         moveDir = Camera.main.transform.forward * GameManager.Instance.moveInput.y;
         moveDir = moveDir + Camera.main.transform.right * GameManager.Instance.moveInput.x;
         moveDir.Normalize();
         moveDir.y = 0;
-        moveDir = moveDir * curSpeed;
+        moveDir = moveDir * personManager.curSpeed;
 
 
         rb.linearVelocity = new Vector3(moveDir.x, rb.linearVelocity.y, moveDir.z);
@@ -49,4 +51,7 @@ public class PlayerManager : MonoBehaviour
             transform.rotation = playerRot;
         }
     }
+
+    #endregion
+
 }

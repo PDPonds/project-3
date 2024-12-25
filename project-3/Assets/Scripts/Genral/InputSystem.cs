@@ -44,6 +44,15 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""9b8c6698-50a1-455c-b90b-7b2348a8deab"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""action"": ""MouseInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""54a83a17-3157-44a4-b51c-cd88e330bc8f"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +142,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_PlayerInput = asset.FindActionMap("PlayerInput", throwIfNotFound: true);
         m_PlayerInput_Movement = m_PlayerInput.FindAction("Movement", throwIfNotFound: true);
         m_PlayerInput_MouseInput = m_PlayerInput.FindAction("MouseInput", throwIfNotFound: true);
+        m_PlayerInput_Sprint = m_PlayerInput.FindAction("Sprint", throwIfNotFound: true);
     }
 
     ~@InputSystem()
@@ -190,12 +211,14 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private List<IPlayerInputActions> m_PlayerInputActionsCallbackInterfaces = new List<IPlayerInputActions>();
     private readonly InputAction m_PlayerInput_Movement;
     private readonly InputAction m_PlayerInput_MouseInput;
+    private readonly InputAction m_PlayerInput_Sprint;
     public struct PlayerInputActions
     {
         private @InputSystem m_Wrapper;
         public PlayerInputActions(@InputSystem wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_PlayerInput_Movement;
         public InputAction @MouseInput => m_Wrapper.m_PlayerInput_MouseInput;
+        public InputAction @Sprint => m_Wrapper.m_PlayerInput_Sprint;
         public InputActionMap Get() { return m_Wrapper.m_PlayerInput; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -211,6 +234,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @MouseInput.started += instance.OnMouseInput;
             @MouseInput.performed += instance.OnMouseInput;
             @MouseInput.canceled += instance.OnMouseInput;
+            @Sprint.started += instance.OnSprint;
+            @Sprint.performed += instance.OnSprint;
+            @Sprint.canceled += instance.OnSprint;
         }
 
         private void UnregisterCallbacks(IPlayerInputActions instance)
@@ -221,6 +247,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @MouseInput.started -= instance.OnMouseInput;
             @MouseInput.performed -= instance.OnMouseInput;
             @MouseInput.canceled -= instance.OnMouseInput;
+            @Sprint.started -= instance.OnSprint;
+            @Sprint.performed -= instance.OnSprint;
+            @Sprint.canceled -= instance.OnSprint;
         }
 
         public void RemoveCallbacks(IPlayerInputActions instance)
@@ -242,5 +271,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnMouseInput(InputAction.CallbackContext context);
+        void OnSprint(InputAction.CallbackContext context);
     }
 }
