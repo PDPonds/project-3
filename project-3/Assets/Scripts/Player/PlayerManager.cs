@@ -12,6 +12,7 @@ public class PlayerManager : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         personManager = GetComponent<PersonManager>();
+        personManager.SwitchState(PlayerState.Normal);
     }
 
     #region Movement

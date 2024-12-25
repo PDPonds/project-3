@@ -236,6 +236,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 5
   runSpeed: 7
+  injurySpeed: 3
+  dragingSpeed: 3
   curSpeed: 0
 --- !u!136 &7661242239389301900
 CapsuleCollider:
