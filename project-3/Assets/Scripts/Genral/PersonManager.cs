@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum PlayerState
+public enum PersonState
 {
     Normal, Injury, Draging
 }
@@ -15,49 +15,49 @@ public class PersonManager : MonoBehaviour
     [HideInInspector] public float curSpeed;
 
     [Header("===== PlayerState =====")]
-    PlayerState playerState;
+    PersonState personState;
 
     private void Update()
     {
         UpdateState();
     }
 
-    #region Player State
+    #region Person State
 
-    public void SwitchState(PlayerState state)
+    public void SwitchState(PersonState state)
     {
-        playerState = state;
-        switch (playerState)
+        personState = state;
+        switch (personState)
         {
-            case PlayerState.Normal:
+            case PersonState.Normal:
                 break;
-            case PlayerState.Injury:
+            case PersonState.Injury:
                 break;
-            case PlayerState.Draging:
+            case PersonState.Draging:
                 break;
         }
     }
 
     void UpdateState()
     {
-        switch (playerState)
+        switch (personState)
         {
-            case PlayerState.Normal:
+            case PersonState.Normal:
                 if (GameManager.Instance.isRunning) curSpeed = runSpeed;
                 else curSpeed = walkSpeed;
                 break;
-            case PlayerState.Injury:
+            case PersonState.Injury:
                 curSpeed = injurySpeed;
                 break;
-            case PlayerState.Draging:
+            case PersonState.Draging:
                 curSpeed = dragingSpeed;
                 break;
         }
     }
 
-    public bool IsState(PlayerState state)
+    public bool IsState(PersonState state)
     {
-        return playerState == state;
+        return personState == state;
     }
 
     #endregion
