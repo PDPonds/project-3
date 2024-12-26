@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5960383026429316139}
   - component: {fileID: 5903645282385862426}
   - component: {fileID: 2822165958753336625}
+  - component: {fileID: 7469635248041613959}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -47,6 +48,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   personPrefab: {fileID: 6929176654271814613, guid: f2ec77047f5e7a14ba2b33a1f1009184, type: 3}
   cameraPrefab: {fileID: 1534512129210453722, guid: 633df75d065169b45a75c0858d0e7049, type: 3}
+  curPlayer: {fileID: 0}
+  isRunning: 0
+  curInteractiveObj: {fileID: 0}
   mousePosMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -64,3 +68,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9b50310df9f2124688ff1024163183d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7469635248041613959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276040276062956262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9843551e878adeb43b5e3f1811b4dc45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveKey: {fileID: 0}
+  interactiveChoiceBorder: {fileID: 0}
+  interactiveChoiceParent: {fileID: 0}
+  interactiveChoicePrefab: {fileID: 3379851936782230039, guid: e99bd552007df854395a4b9728ce3e56, type: 3}
+  interactiveChoiceParentOffset: {x: 0, y: 50, z: 50}

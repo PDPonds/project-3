@@ -9,7 +9,10 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] GameObject personPrefab;
     [SerializeField] GameObject cameraPrefab;
     [Header("===== Player =====")]
+    [HideInInspector] public PersonManager curPlayer;
     [HideInInspector] public bool isRunning;
+    [Header("===== Player Interactive =====")]
+    [HideInInspector] public GameObject curInteractiveObj;
     [Header("===== Input =====")]
     [SerializeField] LayerMask mousePosMask;
     [HideInInspector] public Vector2 mousePos;
@@ -25,6 +28,8 @@ public class GameManager : Singleton<GameManager>
     void InitGame()
     {
         GameObject player = Instantiate(personPrefab, Vector3.zero, Quaternion.identity);
+        PersonManager personManager = player.GetComponent<PersonManager>();
+        curPlayer = personManager;
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         playerManager.Setup();
 

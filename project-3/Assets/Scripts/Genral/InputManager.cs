@@ -14,6 +14,9 @@ public class InputManager : MonoBehaviour
 
             inputSystem.PlayerInput.Sprint.performed += i => GameManager.Instance.isRunning = true;
             inputSystem.PlayerInput.Sprint.canceled += i => GameManager.Instance.isRunning = false;
+
+            inputSystem.PlayerInput.Interactive.performed += i => UIManager.Instance.ShowInteractiveChoice();
+
         }
 
         inputSystem.Enable();
