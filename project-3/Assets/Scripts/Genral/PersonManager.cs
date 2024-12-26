@@ -5,7 +5,7 @@ public enum PersonState
     Normal, Injury, Interact, CancleInteract, Draging
 }
 
-public class PersonManager : MonoBehaviour
+public class PersonManager : MonoBehaviour, IDamageable
 {
     PlayerManager playerManager;
 
@@ -18,6 +18,9 @@ public class PersonManager : MonoBehaviour
 
     [Header("===== PlayerState =====")]
     PersonState personState;
+
+    public int maxHP { get; set; }
+    public int curHP { get; set; }
 
     private void Awake()
     {
@@ -83,5 +86,37 @@ public class PersonManager : MonoBehaviour
 
     #endregion
 
+    #region IDamageable
+
+    public void ResetHP()
+    {
+        curHP = maxHP;
+    }
+
+    public void TakeDamage(int dmg)
+    {
+        curHP -= dmg;
+        if (curHP <= 0)
+        {
+            Death();
+        }
+    }
+
+    public void Heal(int amount)
+    {
+        curHP += amount;
+        if(curHP >= maxHP)
+        {
+            ResetHP();
+        }
+    }
+
+    public void Death()
+    {
+        Debug.Log("Death");
+    }
+
+
+    #endregion
 
 }
