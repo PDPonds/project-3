@@ -22,6 +22,12 @@ public class PersonManager : MonoBehaviour, IDamageable
     public int maxHP { get; set; }
     public int curHP { get; set; }
 
+    [SerializeField] int maxHungry;
+    [SerializeField] int curHungry;
+
+    [SerializeField] int maxThirsty;
+    [SerializeField] int curThirsty;
+
     private void Awake()
     {
         playerManager = GetComponent<PlayerManager>();
@@ -105,7 +111,7 @@ public class PersonManager : MonoBehaviour, IDamageable
     public void Heal(int amount)
     {
         curHP += amount;
-        if(curHP >= maxHP)
+        if (curHP >= maxHP)
         {
             ResetHP();
         }
@@ -117,6 +123,54 @@ public class PersonManager : MonoBehaviour, IDamageable
     }
 
 
+    #endregion
+
+    #region Hungry And Thirsty
+    public void ResetHungry()
+    {
+        curHungry = maxHungry;
+    }
+
+    public void DecreaseHungry(int amount)
+    {
+        curHungry -= amount;
+        if (curHungry <= 0)
+        {
+            curHungry = 0;
+        }
+    }
+
+    public void IncreaseHungry(int amount)
+    {
+        curHungry += amount;
+        if (curHungry >= maxHungry)
+        {
+            ResetHungry();
+        }
+    }
+
+    public void ResetThirsty()
+    {
+        curThirsty = maxThirsty;
+    }
+
+    public void DecreaseThirsty(int amount)
+    {
+        curThirsty -= amount;
+        if (curThirsty <= 0)
+        {
+            curThirsty = 0;
+        }
+    }
+
+    public void IncreaseThirsty(int amount)
+    {
+        curThirsty += amount;
+        if (curThirsty >= maxThirsty)
+        {
+            ResetThirsty();
+        }
+    }
     #endregion
 
 }
