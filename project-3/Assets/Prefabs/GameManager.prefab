@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   personPrefab: {fileID: 6929176654271814613, guid: f2ec77047f5e7a14ba2b33a1f1009184, type: 3}
   cameraPrefab: {fileID: 1534512129210453722, guid: 633df75d065169b45a75c0858d0e7049, type: 3}
+  playerInventory: {fileID: 11400000, guid: cdb7afb0341e0174583ecc208bc3f35b, type: 2}
   curPlayer: {fileID: 0}
   isRunning: 0
   curInteractiveObj: {fileID: 0}
@@ -84,4 +85,4 @@ MonoBehaviour:
   interactiveChoiceBorder: {fileID: 0}
   interactiveChoiceParent: {fileID: 0}
   interactiveChoicePrefab: {fileID: 3379851936782230039, guid: e99bd552007df854395a4b9728ce3e56, type: 3}
-  interactiveChoiceParentOffset: {x: 0, y: 50, z: 50}
+  interactiveChoiceParentOffset: {x: -200, y: 100, z: 0}

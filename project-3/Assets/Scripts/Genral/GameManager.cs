@@ -9,6 +9,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] GameObject personPrefab;
     [SerializeField] GameObject cameraPrefab;
     [Header("===== Player =====")]
+    public InventorySO playerInventory;
     [HideInInspector] public PersonManager curPlayer;
     [HideInInspector] public bool isRunning;
     [Header("===== Player Interactive =====")]

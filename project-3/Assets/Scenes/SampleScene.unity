@@ -1174,18 +1174,6 @@ PrefabInstance:
       propertyPath: interactiveChoiceParent
       value: 
       objectReference: {fileID: 1025665652}
-    - target: {fileID: 7469635248041613959, guid: 9b11bb5a8d8aa3d44aa86705568df971, type: 3}
-      propertyPath: interactiveChoiceParentOffset.x
-      value: -200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7469635248041613959, guid: 9b11bb5a8d8aa3d44aa86705568df971, type: 3}
-      propertyPath: interactiveChoiceParentOffset.y
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 7469635248041613959, guid: 9b11bb5a8d8aa3d44aa86705568df971, type: 3}
-      propertyPath: interactiveChoiceParentOffset.z
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
