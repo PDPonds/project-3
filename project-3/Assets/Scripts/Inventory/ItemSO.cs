@@ -2,10 +2,9 @@ using UnityEngine;
 
 public enum ItemType
 {
-    Weapon, GearBox, Fueltank, Food, Drink, Heal, Ammo
+    Weapon, GearBox, Gastank, Food, Drink, Heal, Ammo
 }
 
-[CreateAssetMenu(fileName = "ItemSO", menuName = "Scriptable Objects/ItemSO")]
 public class ItemSO : ScriptableObject
 {
     public int itemID;
