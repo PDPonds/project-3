@@ -17,6 +17,8 @@ public class InputManager : MonoBehaviour
 
             inputSystem.PlayerInput.Interactive.performed += i => UIManager.Instance.ShowInteractiveChoice();
 
+            inputSystem.PlayerInput.ToggleInventory.performed += i => UIManager.Instance.ToggleInventory(ShowInventoryType.Inventory);
+
         }
 
         inputSystem.Enable();

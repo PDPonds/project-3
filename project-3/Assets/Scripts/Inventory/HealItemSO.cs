@@ -8,6 +8,7 @@ public class HealItemSO : ItemSO
 
     public HealItemSO()
     {
+        itemStackable = true;
         itemType = ItemType.Heal;
     }
 }

@@ -8,6 +8,7 @@ public class FoodItemSO : ItemSO
 
     public FoodItemSO()
     {
+        itemStackable = true;
         itemType = ItemType.Food;
     }
 }

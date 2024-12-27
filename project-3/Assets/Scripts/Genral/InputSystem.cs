@@ -62,6 +62,15 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf5da6fc-72eb-4e46-bbc8-17349d0952e9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +161,17 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""action"": ""Interactive"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da744627-13dd-4642-aad5-80fe52f90b8d"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -164,6 +184,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_PlayerInput_MouseInput = m_PlayerInput.FindAction("MouseInput", throwIfNotFound: true);
         m_PlayerInput_Sprint = m_PlayerInput.FindAction("Sprint", throwIfNotFound: true);
         m_PlayerInput_Interactive = m_PlayerInput.FindAction("Interactive", throwIfNotFound: true);
+        m_PlayerInput_ToggleInventory = m_PlayerInput.FindAction("ToggleInventory", throwIfNotFound: true);
     }
 
     ~@InputSystem()
@@ -234,6 +255,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerInput_MouseInput;
     private readonly InputAction m_PlayerInput_Sprint;
     private readonly InputAction m_PlayerInput_Interactive;
+    private readonly InputAction m_PlayerInput_ToggleInventory;
     public struct PlayerInputActions
     {
         private @InputSystem m_Wrapper;
@@ -242,6 +264,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         public InputAction @MouseInput => m_Wrapper.m_PlayerInput_MouseInput;
         public InputAction @Sprint => m_Wrapper.m_PlayerInput_Sprint;
         public InputAction @Interactive => m_Wrapper.m_PlayerInput_Interactive;
+        public InputAction @ToggleInventory => m_Wrapper.m_PlayerInput_ToggleInventory;
         public InputActionMap Get() { return m_Wrapper.m_PlayerInput; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -263,6 +286,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Interactive.started += instance.OnInteractive;
             @Interactive.performed += instance.OnInteractive;
             @Interactive.canceled += instance.OnInteractive;
+            @ToggleInventory.started += instance.OnToggleInventory;
+            @ToggleInventory.performed += instance.OnToggleInventory;
+            @ToggleInventory.canceled += instance.OnToggleInventory;
         }
 
         private void UnregisterCallbacks(IPlayerInputActions instance)
@@ -279,6 +305,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Interactive.started -= instance.OnInteractive;
             @Interactive.performed -= instance.OnInteractive;
             @Interactive.canceled -= instance.OnInteractive;
+            @ToggleInventory.started -= instance.OnToggleInventory;
+            @ToggleInventory.performed -= instance.OnToggleInventory;
+            @ToggleInventory.canceled -= instance.OnToggleInventory;
         }
 
         public void RemoveCallbacks(IPlayerInputActions instance)
@@ -302,5 +331,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         void OnMouseInput(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnInteractive(InputAction.CallbackContext context);
+        void OnToggleInventory(InputAction.CallbackContext context);
     }
 }

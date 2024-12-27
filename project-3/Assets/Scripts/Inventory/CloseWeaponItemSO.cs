@@ -4,9 +4,11 @@ using UnityEngine;
 public class CloseWeaponItemSO : WeaponItemSO
 {
     public float attackRange;
+    public float weaponDurability;
 
     public CloseWeaponItemSO()
     {
+        itemStackable = false;
         weaponType = WeaponType.CloseWeapon;
     }
 }

@@ -5,6 +5,7 @@ public class AmmoItemSO : ItemSO
 {
     public AmmoItemSO()
     {
+        itemStackable = true;
         itemType = ItemType.Ammo;
     }
 }

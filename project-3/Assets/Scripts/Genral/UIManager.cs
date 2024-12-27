@@ -1,5 +1,12 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+public enum ShowInventoryType
+{
+    Inventory, Storage, Shop
+}
 
 public class UIManager : Singleton<UIManager>
 {
@@ -11,6 +18,18 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Transform interactiveChoiceParent;
     [SerializeField] GameObject interactiveChoicePrefab;
     [SerializeField] Vector3 interactiveChoiceParentOffset;
+    [Header("===== Inventory =====")]
+    [SerializeField] GameObject inventoryPanel;
+    [Header("- Inventory")]
+    [SerializeField] GameObject inventoryBorder;
+    [SerializeField] Transform inventoryParent;
+    [SerializeField] GameObject itemSlotPrefab;
+    [SerializeField] TextMeshProUGUI inventoryWeightText;
+    [Header("- Storage")]
+    [SerializeField] GameObject storageBorder;
+    [Header("- Shop")]
+    [SerializeField] GameObject shopBorder;
+
     private void Awake()
     {
         Button border = interactiveChoiceBorder.GetComponent<Button>();
@@ -76,4 +95,50 @@ public class UIManager : Singleton<UIManager>
     }
 
     #endregion
+
+    #region Inventory
+
+    void InitItemSlotToParent(List<ItemSlot> slots, Transform parent)
+    {
+        ClearParent(parent);
+        if (slots.Count > 0)
+        {
+            for (int i = 0; i < slots.Count; i++)
+            {
+                GameObject obj = Instantiate(itemSlotPrefab, parent);
+                ItemSlotPrefab slotprefab = obj.GetComponent<ItemSlotPrefab>();
+                slotprefab.Setup(slots[i]);
+            }
+        }
+    }
+
+    void UpdateInventory()
+    {
+        InitItemSlotToParent(GameManager.Instance.playerInventory.slots, inventoryParent);
+        inventoryWeightText.text = $"{GameManager.Instance.playerInventory.GetCurWeight().ToString()} / {GameManager.Instance.playerInventory.maxWeight}";
+    }
+
+    public void ToggleInventory(ShowInventoryType showType)
+    {
+        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+        storageBorder.SetActive(false);
+        shopBorder.SetActive(false);
+        inventoryBorder.SetActive(true);
+        if (inventoryPanel.activeSelf) UpdateInventory();
+
+        switch (showType)
+        {
+            case ShowInventoryType.Inventory:
+                break;
+            case ShowInventoryType.Storage:
+                storageBorder.SetActive(true);
+                break;
+            case ShowInventoryType.Shop:
+                shopBorder.SetActive(true);
+                break;
+        }
+    }
+
+    #endregion
+
 }

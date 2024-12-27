@@ -11,9 +11,9 @@ public class ItemSO : ScriptableObject
     public string itemName;
     public Sprite itemIcon;
     public float itemWeigth;
-    public int itemMaxStack;
     public Vector2Int Min_Max_ItemCost;
     public GameObject itemPrefab;
+    public bool itemStackable;
     public ItemType itemType;
 
     public int GetRandomCost()

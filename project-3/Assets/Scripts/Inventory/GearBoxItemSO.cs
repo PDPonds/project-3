@@ -8,6 +8,7 @@ public class GearBoxItemSO : ItemSO
 
     public GearBoxItemSO()
     {
+        itemStackable = true;
         itemType = ItemType.GearBox;
     }
 }

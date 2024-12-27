@@ -9,6 +9,7 @@ public class ThrowingWeaponItemSO : RangeWeaponItemSO
 
     public ThrowingWeaponItemSO()
     {
+        itemStackable = true;
         rangeWeaponType = RangeWeaponType.ThrowingWeapon;
     }
 }
