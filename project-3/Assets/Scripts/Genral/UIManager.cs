@@ -66,7 +66,7 @@ public class UIManager : Singleton<UIManager>
         GameObject interactiveObj = GameManager.Instance.curInteractiveObj;
         if (interactiveObj == null) return;
 
-        GameManager.Instance.curPlayer.SwitchState(PersonState.Interact);
+        GameManager.Instance.curPlayer.SwitchState(PlayerState.Interact);
 
         interactiveChoiceBorder.SetActive(true);
 
@@ -91,7 +91,7 @@ public class UIManager : Singleton<UIManager>
     public void CloseInteractiveChoice()
     {
         HideInteractiveChoice();
-        GameManager.Instance.curPlayer.SwitchState(PersonState.CancleInteract);
+        GameManager.Instance.curPlayer.SwitchState(PlayerState.CancleInteract);
     }
 
     #endregion
@@ -120,6 +120,8 @@ public class UIManager : Singleton<UIManager>
 
     public void ToggleInventory(ShowInventoryType showType)
     {
+        if (GameManager.Instance.curPlayer.IsState(PlayerState.Interact)) return;
+
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
         storageBorder.SetActive(false);
         shopBorder.SetActive(false);

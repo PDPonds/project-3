@@ -10,7 +10,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] GameObject cameraPrefab;
     [Header("===== Player =====")]
     public InventorySO playerInventory;
-    [HideInInspector] public PersonManager curPlayer;
+    [HideInInspector] public PlayerManager curPlayer;
     [HideInInspector] public bool isRunning;
     [Header("===== Player Interactive =====")]
     [HideInInspector] public GameObject curInteractiveObj;
@@ -29,9 +29,8 @@ public class GameManager : Singleton<GameManager>
     void InitGame()
     {
         GameObject player = Instantiate(personPrefab, Vector3.zero, Quaternion.identity);
-        PersonManager personManager = player.GetComponent<PersonManager>();
-        curPlayer = personManager;
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
+        curPlayer = playerManager;
         playerManager.Setup();
 
         GameObject camera = Instantiate(cameraPrefab, Vector3.zero, Quaternion.identity);

@@ -183,7 +183,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2037280145094207448}
   - component: {fileID: 6287601105125679466}
-  - component: {fileID: -2805990393149884079}
   - component: {fileID: 7661242239389301900}
   - component: {fileID: 1035356649606800947}
   m_Layer: 0
@@ -222,27 +221,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 5
-  interactiveRange: 1
-  interactiveMask:
-    serializedVersion: 2
-    m_Bits: 64
---- !u!114 &-2805990393149884079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6929176654271814613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d99c3881673ec5b4eaf9a41c8f011f1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   walkSpeed: 5
   runSpeed: 7
   injurySpeed: 3
   dragingSpeed: 3
   curSpeed: 0
+  maxHungry: 10
+  curHungry: 0
+  maxThirsty: 10
+  curThirsty: 0
+  interactiveRange: 1
+  interactiveMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!136 &7661242239389301900
 CapsuleCollider:
   m_ObjectHideFlags: 0
