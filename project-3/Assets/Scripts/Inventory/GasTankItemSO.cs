@@ -9,6 +9,7 @@ public class GasTankItemSO : ItemSO
 
     public GasTankItemSO()
     {
+        itemCanHoldInHand = true;
         itemStackable = false;
         itemType = ItemType.Gastank;
     }

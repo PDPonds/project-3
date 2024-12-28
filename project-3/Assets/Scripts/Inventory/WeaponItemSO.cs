@@ -14,6 +14,7 @@ public class WeaponItemSO : ItemSO
 
     public WeaponItemSO()
     {
+        itemCanHoldInHand = true;
         itemType = ItemType.Weapon;
     }
 

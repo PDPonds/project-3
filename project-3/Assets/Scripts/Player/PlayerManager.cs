@@ -2,10 +2,10 @@ using UnityEngine;
 
 public enum PlayerState
 {
-    Normal, Injury, Interact, CancleInteract, Draging
+    Normal, Injury, ShowUI, CancleUI, Draging
 }
 
-public class PlayerManager : MonoBehaviour , IDamageable
+public class PlayerManager : MonoBehaviour, IDamageable
 {
     Vector3 moveDir;
     Rigidbody rb;
@@ -34,6 +34,10 @@ public class PlayerManager : MonoBehaviour , IDamageable
     [Header("===== Interactive =====")]
     [SerializeField] float interactiveRange;
     [SerializeField] LayerMask interactiveMask;
+
+    [Header("===== HandSlot =====")]
+    public ItemSlot handSlot_1 = new ItemSlot();
+    public ItemSlot handSlot_2 = new ItemSlot();
 
     public void Setup()
     {
@@ -114,7 +118,7 @@ public class PlayerManager : MonoBehaviour , IDamageable
                 UIManager.Instance.HideInteractiveChoice();
             }
         }
-        else if (IsState(PlayerState.Interact))
+        else if (IsState(PlayerState.ShowUI))
         {
             UIManager.Instance.HideInteractiveKey();
             GameManager.Instance.curInteractiveObj = null;
@@ -140,9 +144,9 @@ public class PlayerManager : MonoBehaviour , IDamageable
                 break;
             case PlayerState.Injury:
                 break;
-            case PlayerState.Interact:
+            case PlayerState.ShowUI:
                 break;
-            case PlayerState.CancleInteract:
+            case PlayerState.CancleUI:
                 SwitchState(PlayerState.Normal);
                 break;
             case PlayerState.Draging:
@@ -165,7 +169,7 @@ public class PlayerManager : MonoBehaviour , IDamageable
                 curSpeed = injurySpeed;
 
                 break;
-            case PlayerState.Interact:
+            case PlayerState.ShowUI:
                 curSpeed = 0;
                 break;
             case PlayerState.Draging:

@@ -6,7 +6,7 @@ public class GameManager : Singleton<GameManager>
 {
 
     [Header("===== Init On Game Start ======")]
-    [SerializeField] GameObject personPrefab;
+    [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject cameraPrefab;
     [Header("===== Player =====")]
     public InventorySO playerInventory;
@@ -28,7 +28,7 @@ public class GameManager : Singleton<GameManager>
 
     void InitGame()
     {
-        GameObject player = Instantiate(personPrefab, Vector3.zero, Quaternion.identity);
+        GameObject player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         curPlayer = playerManager;
         playerManager.Setup();

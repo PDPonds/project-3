@@ -10,6 +10,11 @@ public enum ShowInventoryType
 
 public class UIManager : Singleton<UIManager>
 {
+    public Transform canvasTransform;
+    [Header("===== PlayerStatus =====")]
+    [SerializeField] Transform playerStatusPanel;
+    [SerializeField] Transform playerStatus_HandSlot_1_Border;
+    [SerializeField] Transform playerStatus_HandSlot_2_Border;
     [Header("===== Interactive =====")]
     [Header("- Key")]
     [SerializeField] GameObject interactiveKey;
@@ -22,9 +27,12 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] GameObject inventoryPanel;
     [Header("- Inventory")]
     [SerializeField] GameObject inventoryBorder;
-    [SerializeField] Transform inventoryParent;
+    public Transform inventoryParent;
     [SerializeField] GameObject itemSlotPrefab;
     [SerializeField] TextMeshProUGUI inventoryWeightText;
+    [Header("- Hand")]
+    public Transform handSlotParent_1;
+    public Transform handSlotParent_2;
     [Header("- Storage")]
     [SerializeField] GameObject storageBorder;
     [Header("- Shop")]
@@ -34,6 +42,11 @@ public class UIManager : Singleton<UIManager>
     {
         Button border = interactiveChoiceBorder.GetComponent<Button>();
         border.onClick.AddListener(CloseInteractiveChoice);
+    }
+
+    private void Start()
+    {
+        ShowPlayerStatusPanel();
     }
 
     public void ClearParent(Transform parent)
@@ -46,6 +59,27 @@ public class UIManager : Singleton<UIManager>
             }
         }
     }
+
+    #region PlayerStatusPanel
+
+    void ShowPlayerStatusPanel()
+    {
+        playerStatusPanel.gameObject.SetActive(true);
+        UpdatePlayerStatus();
+    }
+
+    void HidePlayerStatusPanel()
+    {
+        playerStatusPanel.gameObject.SetActive(false);
+    }
+
+    void UpdatePlayerStatus()
+    {
+        InitItemSlotToParent(GameManager.Instance.curPlayer.handSlot_1, playerStatus_HandSlot_1_Border);
+        InitItemSlotToParent(GameManager.Instance.curPlayer.handSlot_2, playerStatus_HandSlot_2_Border);
+    }
+
+    #endregion
 
     #region Interactive
 
@@ -66,7 +100,7 @@ public class UIManager : Singleton<UIManager>
         GameObject interactiveObj = GameManager.Instance.curInteractiveObj;
         if (interactiveObj == null) return;
 
-        GameManager.Instance.curPlayer.SwitchState(PlayerState.Interact);
+        GameManager.Instance.curPlayer.SwitchState(PlayerState.ShowUI);
 
         interactiveChoiceBorder.SetActive(true);
 
@@ -91,7 +125,7 @@ public class UIManager : Singleton<UIManager>
     public void CloseInteractiveChoice()
     {
         HideInteractiveChoice();
-        GameManager.Instance.curPlayer.SwitchState(PlayerState.CancleInteract);
+        GameManager.Instance.curPlayer.SwitchState(PlayerState.CancleUI);
     }
 
     #endregion
@@ -112,21 +146,44 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    void UpdateInventory()
+    void InitItemSlotToParent(ItemSlot slot, Transform parent)
+    {
+        ClearParent(parent);
+        if (slot.item != null)
+        {
+            GameObject obj = Instantiate(itemSlotPrefab, parent);
+            ItemSlotPrefab slotprefab = obj.GetComponent<ItemSlotPrefab>();
+            slotprefab.Setup(slot);
+        }
+    }
+
+    public void UpdateInventory()
     {
         InitItemSlotToParent(GameManager.Instance.playerInventory.slots, inventoryParent);
+        InitItemSlotToParent(GameManager.Instance.curPlayer.handSlot_1, handSlotParent_1);
+        InitItemSlotToParent(GameManager.Instance.curPlayer.handSlot_2, handSlotParent_2);
         inventoryWeightText.text = $"{GameManager.Instance.playerInventory.GetCurWeight().ToString()} / {GameManager.Instance.playerInventory.maxWeight}";
     }
 
     public void ToggleInventory(ShowInventoryType showType)
     {
-        if (GameManager.Instance.curPlayer.IsState(PlayerState.Interact)) return;
+        if (!inventoryPanel.activeSelf && GameManager.Instance.curPlayer.IsState(PlayerState.ShowUI)) return;
 
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
         storageBorder.SetActive(false);
         shopBorder.SetActive(false);
         inventoryBorder.SetActive(true);
-        if (inventoryPanel.activeSelf) UpdateInventory();
+        if (inventoryPanel.activeSelf)
+        {
+            GameManager.Instance.curPlayer.SwitchState(PlayerState.ShowUI);
+            UpdateInventory();
+            HidePlayerStatusPanel();
+        }
+        else
+        {
+            ShowPlayerStatusPanel();
+            GameManager.Instance.curPlayer.SwitchState(PlayerState.CancleUI);
+        }
 
         switch (showType)
         {
@@ -139,6 +196,8 @@ public class UIManager : Singleton<UIManager>
                 shopBorder.SetActive(true);
                 break;
         }
+
+
     }
 
     #endregion

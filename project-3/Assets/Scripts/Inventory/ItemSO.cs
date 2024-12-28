@@ -14,7 +14,9 @@ public class ItemSO : ScriptableObject
     public Vector2Int Min_Max_ItemCost;
     public GameObject itemPrefab;
     public bool itemStackable;
+    public bool itemCanHoldInHand;
     public ItemType itemType;
+
 
     public int GetRandomCost()
     {

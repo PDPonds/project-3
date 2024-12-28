@@ -9,6 +9,7 @@ public class FoodItemSO : ItemSO
     public FoodItemSO()
     {
         itemStackable = true;
+        itemCanHoldInHand = true;
         itemType = ItemType.Food;
     }
 }

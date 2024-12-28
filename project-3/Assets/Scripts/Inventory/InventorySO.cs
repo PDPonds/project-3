@@ -79,6 +79,10 @@ public class InventorySO : ScriptableObject
         if (EnoughItems(item, count, out int itemIndex))
         {
             slots[itemIndex].count -= count;
+            if (slots[itemIndex].count <= 0)
+            {
+                slots.RemoveAt(itemIndex);
+            }
         }
     }
 
