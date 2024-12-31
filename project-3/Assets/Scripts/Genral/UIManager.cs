@@ -73,10 +73,25 @@ public class UIManager : Singleton<UIManager>
         playerStatusPanel.gameObject.SetActive(false);
     }
 
-    void UpdatePlayerStatus()
+    public void UpdatePlayerStatus()
     {
         InitItemSlotToParent(GameManager.Instance.curPlayer.handSlot_1, playerStatus_HandSlot_1_Border);
         InitItemSlotToParent(GameManager.Instance.curPlayer.handSlot_2, playerStatus_HandSlot_2_Border);
+        Image img_1 = playerStatus_HandSlot_1_Border.GetComponent<Image>();
+        Image img_2 = playerStatus_HandSlot_2_Border.GetComponent<Image>();
+        img_1.color = new Color(1, 1, 1, 0);
+        img_2.color = new Color(1, 1, 1, 0);
+        if (GameManager.Instance.curHandSlot != null)
+        {
+            if (GameManager.Instance.curHandSlot.transform == handSlotParent_1)
+            {
+                img_1.color = new Color(1, 1, 1, 1);
+            }
+            else if (GameManager.Instance.curHandSlot.transform == handSlotParent_2)
+            {
+                img_2.color = new Color(1, 1, 1, 1);
+            }
+        }
     }
 
     #endregion
@@ -201,5 +216,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     #endregion
+
+
 
 }

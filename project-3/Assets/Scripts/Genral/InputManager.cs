@@ -19,6 +19,9 @@ public class InputManager : MonoBehaviour
 
             inputSystem.PlayerInput.ToggleInventory.performed += i => UIManager.Instance.ToggleInventory(ShowInventoryType.Inventory);
 
+            inputSystem.PlayerInput.Select_HandSlot_1.performed += i => GameManager.Instance.SelectHandSlot(1);
+            inputSystem.PlayerInput.Select_HandSlot_2.performed += i => GameManager.Instance.SelectHandSlot(2);
+
         }
 
         inputSystem.Enable();

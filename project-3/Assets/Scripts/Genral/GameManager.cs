@@ -12,6 +12,7 @@ public class GameManager : Singleton<GameManager>
     public InventorySO playerInventory;
     [HideInInspector] public PlayerManager curPlayer;
     [HideInInspector] public bool isRunning;
+    [HideInInspector] public DropItemSlot curHandSlot;
     [Header("===== Player Interactive =====")]
     [HideInInspector] public GameObject curInteractiveObj;
     [Header("===== Input =====")]
@@ -23,6 +24,12 @@ public class GameManager : Singleton<GameManager>
     {
         InitGame();
     }
+
+    private void Start()
+    {
+        SelectHandSlot(1);
+    }
+
 
     #region Init On Game Start
 
@@ -61,6 +68,26 @@ public class GameManager : Singleton<GameManager>
         dir.Normalize();
         dir.y = 0;
         return dir;
+    }
+
+    #endregion
+
+    #region Select Hand Slot
+
+    public void SelectHandSlot(int handSlot)
+    {
+        switch (handSlot)
+        {
+            case 1:
+                curHandSlot = UIManager.Instance.handSlotParent_1.GetComponent<DropItemSlot>(); ;
+                break;
+            case 2:
+                curHandSlot = UIManager.Instance.handSlotParent_2.GetComponent<DropItemSlot>(); ;
+                break;
+        }
+
+        UIManager.Instance.UpdatePlayerStatus();
+
     }
 
     #endregion
