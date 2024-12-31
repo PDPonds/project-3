@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public enum HandSlotType
 {
-    Hand_1, Hand_2, HeadEquipment, BodyEquipment, LegEquipment, FootEquipment, Inventory
+    Hand_1, Hand_2, HeadEquipment, BodyEquipment, LegEquipment, FootEquipment, Inventory, Storage
 }
 
 public class DropItemSlot : MonoBehaviour, IDropHandler
@@ -48,6 +48,16 @@ public class DropItemSlot : MonoBehaviour, IDropHandler
                     }
                 }
 
+                if (itemSlotPrefab.GetLastParent() == UIManager.Instance.storageParent)
+                {
+                    if (HasItemInSlot(out ItemSlotPrefab curItemSlotPrefabInSlot))
+                    {
+                        GameManager.Instance.curStorageObj.AddItem(curItemSlotPrefabInSlot.curSlot);
+                    }
+
+                    GameManager.Instance.curStorageObj.RemoveItem(itemSlotPrefab.curSlot.item, itemSlotPrefab.curSlot.count);
+                }
+
                 GameManager.Instance.curPlayer.handSlot_1.item = itemSlotPrefab.curSlot.item;
                 GameManager.Instance.curPlayer.handSlot_1.count = itemSlotPrefab.curSlot.count;
                 GameManager.Instance.curPlayer.handSlot_1.maxValue = itemSlotPrefab.curSlot.maxValue;
@@ -87,6 +97,15 @@ public class DropItemSlot : MonoBehaviour, IDropHandler
                     }
                 }
 
+                if (itemSlotPrefab.GetLastParent() == UIManager.Instance.storageParent)
+                {
+                    if (HasItemInSlot(out ItemSlotPrefab curItemSlotPrefabInSlot))
+                    {
+                        GameManager.Instance.curStorageObj.AddItem(curItemSlotPrefabInSlot.curSlot);
+                    }
+
+                    GameManager.Instance.curStorageObj.RemoveItem(itemSlotPrefab.curSlot.item, itemSlotPrefab.curSlot.count);
+                }
 
                 GameManager.Instance.curPlayer.handSlot_2.item = itemSlotPrefab.curSlot.item;
                 GameManager.Instance.curPlayer.handSlot_2.count = itemSlotPrefab.curSlot.count;
@@ -108,8 +127,6 @@ public class DropItemSlot : MonoBehaviour, IDropHandler
                 {
                     if (itemSlotPrefab.GetLastParent() == UIManager.Instance.handSlotParent_1)
                     {
-                        GameManager.Instance.playerInventory.AddItem(GameManager.Instance.curPlayer.handSlot_1);
-
                         GameManager.Instance.curPlayer.handSlot_1.item = null;
                         GameManager.Instance.curPlayer.handSlot_1.count = 0;
                         GameManager.Instance.curPlayer.handSlot_1.maxValue = 0;
@@ -118,12 +135,49 @@ public class DropItemSlot : MonoBehaviour, IDropHandler
 
                     if (itemSlotPrefab.GetLastParent() == UIManager.Instance.handSlotParent_2)
                     {
-                        GameManager.Instance.playerInventory.AddItem(GameManager.Instance.curPlayer.handSlot_2);
                         GameManager.Instance.curPlayer.handSlot_2.item = null;
                         GameManager.Instance.curPlayer.handSlot_2.count = 0;
                         GameManager.Instance.curPlayer.handSlot_2.maxValue = 0;
                         GameManager.Instance.curPlayer.handSlot_2.curValue = 0;
                     }
+
+                    if (itemSlotPrefab.GetLastParent() == UIManager.Instance.storageParent)
+                    {
+                        GameManager.Instance.curStorageObj.RemoveItem(itemSlotPrefab.curSlot.item, itemSlotPrefab.curSlot.count);
+                    }
+
+                    GameManager.Instance.playerInventory.AddItem(itemSlotPrefab.curSlot);
+
+                }
+
+                break;
+            case HandSlotType.Storage:
+
+                if (itemSlotPrefab.GetLastParent() != UIManager.Instance.storageParent)
+                {
+                    if (itemSlotPrefab.GetLastParent() == UIManager.Instance.handSlotParent_1)
+                    {
+                        GameManager.Instance.curPlayer.handSlot_1.item = null;
+                        GameManager.Instance.curPlayer.handSlot_1.count = 0;
+                        GameManager.Instance.curPlayer.handSlot_1.maxValue = 0;
+                        GameManager.Instance.curPlayer.handSlot_1.curValue = 0;
+                    }
+
+                    if (itemSlotPrefab.GetLastParent() == UIManager.Instance.handSlotParent_2)
+                    {
+                        GameManager.Instance.curPlayer.handSlot_2.item = null;
+                        GameManager.Instance.curPlayer.handSlot_2.count = 0;
+                        GameManager.Instance.curPlayer.handSlot_2.maxValue = 0;
+                        GameManager.Instance.curPlayer.handSlot_2.curValue = 0;
+                    }
+
+                    if (itemSlotPrefab.GetLastParent() == UIManager.Instance.inventoryParent)
+                    {
+                        GameManager.Instance.playerInventory.RemoveItem(itemSlotPrefab.curSlot.item, itemSlotPrefab.curSlot.count);
+                    }
+
+                    GameManager.Instance.curStorageObj.AddItem(itemSlotPrefab.curSlot);
+
                 }
 
                 break;

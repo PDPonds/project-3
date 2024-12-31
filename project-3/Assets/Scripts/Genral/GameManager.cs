@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public DropItemSlot curHandSlot;
     [Header("===== Player Interactive =====")]
     [HideInInspector] public GameObject curInteractiveObj;
+    [HideInInspector] public StorageObject curStorageObj;
     [Header("===== Input =====")]
     [SerializeField] LayerMask mousePosMask;
     [HideInInspector] public Vector2 mousePos;

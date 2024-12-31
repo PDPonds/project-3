@@ -35,6 +35,7 @@ public class UIManager : Singleton<UIManager>
     public Transform handSlotParent_2;
     [Header("- Storage")]
     [SerializeField] GameObject storageBorder;
+    public Transform storageParent;
     [Header("- Shop")]
     [SerializeField] GameObject shopBorder;
 
@@ -180,39 +181,43 @@ public class UIManager : Singleton<UIManager>
         inventoryWeightText.text = $"{GameManager.Instance.playerInventory.GetCurWeight().ToString()} / {GameManager.Instance.playerInventory.maxWeight}";
     }
 
+    public void UpdateStorage()
+    {
+        InitItemSlotToParent(GameManager.Instance.curStorageObj.slots, storageParent);
+    }
+
     public void ToggleInventory(ShowInventoryType showType)
     {
-        if (!inventoryPanel.activeSelf && GameManager.Instance.curPlayer.IsState(PlayerState.ShowUI)) return;
-
-        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
-        storageBorder.SetActive(false);
-        shopBorder.SetActive(false);
-        inventoryBorder.SetActive(true);
         if (inventoryPanel.activeSelf)
         {
+            inventoryPanel.SetActive(false);
+            ShowPlayerStatusPanel();
+            GameManager.Instance.curPlayer.SwitchState(PlayerState.CancleUI);
+        }
+        else
+        {
+            inventoryPanel.SetActive(true);
+            CloseInteractiveChoice();
+            switch (showType)
+            {
+                case ShowInventoryType.Inventory:
+                    if (GameManager.Instance.curPlayer.IsState(PlayerState.ShowUI)) return;
+                    storageBorder.SetActive(false);
+                    shopBorder.SetActive(false);
+                    inventoryBorder.SetActive(true);
+                    break;
+                case ShowInventoryType.Storage:
+                    storageBorder.SetActive(true);
+                    UpdateStorage();
+                    break;
+                case ShowInventoryType.Shop:
+                    shopBorder.SetActive(true);
+                    break;
+            }
             GameManager.Instance.curPlayer.SwitchState(PlayerState.ShowUI);
             UpdateInventory();
             HidePlayerStatusPanel();
         }
-        else
-        {
-            ShowPlayerStatusPanel();
-            GameManager.Instance.curPlayer.SwitchState(PlayerState.CancleUI);
-        }
-
-        switch (showType)
-        {
-            case ShowInventoryType.Inventory:
-                break;
-            case ShowInventoryType.Storage:
-                storageBorder.SetActive(true);
-                break;
-            case ShowInventoryType.Shop:
-                shopBorder.SetActive(true);
-                break;
-        }
-
-
     }
 
     #endregion

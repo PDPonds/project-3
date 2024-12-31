@@ -38,6 +38,7 @@ public class ItemSlotPrefab : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
         Image img = GetComponent<Image>();
         img.raycastTarget = true;
         UIManager.Instance.UpdateInventory();
+        UIManager.Instance.UpdateStorage();
     }
 
     public void SetLastParent(Transform parent)
