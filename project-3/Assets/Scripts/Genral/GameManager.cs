@@ -77,6 +77,18 @@ public class GameManager : Singleton<GameManager>
 
     public void SelectHandSlot(int handSlot)
     {
+        if (curPlayer.IsState(PlayerState.Draging))
+        {
+            UIManager.Instance.GenerateText("Draging", 2f);
+            return;
+        }
+
+        if (curPlayer.IsState(PlayerState.ShowUI))
+        {
+            UIManager.Instance.GenerateText("UI Active", 2f);
+            return;
+        }
+
         switch (handSlot)
         {
             case 1:

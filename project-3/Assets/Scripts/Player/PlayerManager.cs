@@ -287,6 +287,31 @@ public class PlayerManager : MonoBehaviour, IDamageable
     }
     #endregion
 
+    #region Attack
+    public void Attack()
+    {
+        if (IsState(PlayerState.Draging))
+        {
+            curDragObject.EndDrag();
+            return;
+        }
+    }
+
+    #endregion
+
+    #region Use Item
+
+    public void UseItem()
+    {
+        if (IsState(PlayerState.Draging))
+        {
+            curDragObject.EndDrag();
+            return;
+        }
+    }
+
+    #endregion
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;

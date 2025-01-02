@@ -233,12 +233,15 @@ public class UIManager : Singleton<UIManager>
     #endregion
 
     #region GenerateText
-    public GameObject GenerateText(string text)
+    public void GenerateText(string text, float destroyDuration)
     {
-        GameObject obj = Instantiate(textPrefab, textParent);
-        TextMeshProUGUI tmpro = obj.GetComponent<TextMeshProUGUI>();
-        tmpro.text = text;
-        return obj;
+        if (textParent.childCount < 5)
+        {
+            GameObject obj = Instantiate(textPrefab, textParent);
+            TextMeshProUGUI tmpro = obj.GetComponent<TextMeshProUGUI>();
+            tmpro.text = text;
+            Destroy(obj, destroyDuration);
+        }
     }
 
     #endregion

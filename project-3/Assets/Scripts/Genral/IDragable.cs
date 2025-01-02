@@ -38,7 +38,6 @@ public abstract class IDragable : MonoBehaviour
         isDraging = false;
         GameManager.Instance.curPlayer.curDragObject = null;
         GameManager.Instance.curPlayer.SwitchState(PlayerState.EndAnyAction);
-        Debug.Log("End Drag");
     }
 
 

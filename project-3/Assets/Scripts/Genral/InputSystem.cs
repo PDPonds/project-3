@@ -89,6 +89,24 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""b6e0573f-1b50-4ad9-b15b-e7f76d1d7297"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""0eafe35a-420f-43ef-a288-a09c1072f572"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -212,6 +230,28 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""action"": ""Select_HandSlot_2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fc590feb-80f9-4f3d-b6ac-a3292cd14e88"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed8e55f2-ca8d-4f2e-8599-da37f8e2b07f"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -227,6 +267,8 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_PlayerInput_ToggleInventory = m_PlayerInput.FindAction("ToggleInventory", throwIfNotFound: true);
         m_PlayerInput_Select_HandSlot_1 = m_PlayerInput.FindAction("Select_HandSlot_1", throwIfNotFound: true);
         m_PlayerInput_Select_HandSlot_2 = m_PlayerInput.FindAction("Select_HandSlot_2", throwIfNotFound: true);
+        m_PlayerInput_Attack = m_PlayerInput.FindAction("Attack", throwIfNotFound: true);
+        m_PlayerInput_UseItem = m_PlayerInput.FindAction("UseItem", throwIfNotFound: true);
     }
 
     ~@InputSystem()
@@ -300,6 +342,8 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerInput_ToggleInventory;
     private readonly InputAction m_PlayerInput_Select_HandSlot_1;
     private readonly InputAction m_PlayerInput_Select_HandSlot_2;
+    private readonly InputAction m_PlayerInput_Attack;
+    private readonly InputAction m_PlayerInput_UseItem;
     public struct PlayerInputActions
     {
         private @InputSystem m_Wrapper;
@@ -311,6 +355,8 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         public InputAction @ToggleInventory => m_Wrapper.m_PlayerInput_ToggleInventory;
         public InputAction @Select_HandSlot_1 => m_Wrapper.m_PlayerInput_Select_HandSlot_1;
         public InputAction @Select_HandSlot_2 => m_Wrapper.m_PlayerInput_Select_HandSlot_2;
+        public InputAction @Attack => m_Wrapper.m_PlayerInput_Attack;
+        public InputAction @UseItem => m_Wrapper.m_PlayerInput_UseItem;
         public InputActionMap Get() { return m_Wrapper.m_PlayerInput; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -341,6 +387,12 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Select_HandSlot_2.started += instance.OnSelect_HandSlot_2;
             @Select_HandSlot_2.performed += instance.OnSelect_HandSlot_2;
             @Select_HandSlot_2.canceled += instance.OnSelect_HandSlot_2;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
+            @UseItem.started += instance.OnUseItem;
+            @UseItem.performed += instance.OnUseItem;
+            @UseItem.canceled += instance.OnUseItem;
         }
 
         private void UnregisterCallbacks(IPlayerInputActions instance)
@@ -366,6 +418,12 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Select_HandSlot_2.started -= instance.OnSelect_HandSlot_2;
             @Select_HandSlot_2.performed -= instance.OnSelect_HandSlot_2;
             @Select_HandSlot_2.canceled -= instance.OnSelect_HandSlot_2;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
+            @UseItem.started -= instance.OnUseItem;
+            @UseItem.performed -= instance.OnUseItem;
+            @UseItem.canceled -= instance.OnUseItem;
         }
 
         public void RemoveCallbacks(IPlayerInputActions instance)
@@ -392,5 +450,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         void OnToggleInventory(InputAction.CallbackContext context);
         void OnSelect_HandSlot_1(InputAction.CallbackContext context);
         void OnSelect_HandSlot_2(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
+        void OnUseItem(InputAction.CallbackContext context);
     }
 }
