@@ -17,4 +17,13 @@ public class InteractiveChoicePrefab : MonoBehaviour
         button.onClick.AddListener(actionObj.Action);
     }
 
+    public void Setup(IDragable dragable)
+    {
+        interactiveChoiceText.text = dragable.DragName();
+
+        button = GetComponent<Button>();
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(dragable.BeginDrag);
+    }
+
 }

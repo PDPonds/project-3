@@ -38,6 +38,9 @@ public class UIManager : Singleton<UIManager>
     public Transform storageParent;
     [Header("- Shop")]
     [SerializeField] GameObject shopBorder;
+    [Header("===== Generate Text =====")]
+    [SerializeField] Transform textParent;
+    [SerializeField] GameObject textPrefab;
 
     private void Awake()
     {
@@ -131,6 +134,13 @@ public class UIManager : Singleton<UIManager>
             choice.Setup(actionObject);
         }
 
+        if (interactiveObj.TryGetComponent<IDragable>(out IDragable dragable))
+        {
+            GameObject actionChoice = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
+            InteractiveChoicePrefab choice = actionChoice.GetComponent<InteractiveChoicePrefab>();
+            choice.Setup(dragable);
+        }
+
     }
 
     public void HideInteractiveChoice()
@@ -141,7 +151,7 @@ public class UIManager : Singleton<UIManager>
     public void CloseInteractiveChoice()
     {
         HideInteractiveChoice();
-        GameManager.Instance.curPlayer.SwitchState(PlayerState.CancleUI);
+        GameManager.Instance.curPlayer.SwitchState(PlayerState.EndAnyAction);
     }
 
     #endregion
@@ -192,7 +202,7 @@ public class UIManager : Singleton<UIManager>
         {
             inventoryPanel.SetActive(false);
             ShowPlayerStatusPanel();
-            GameManager.Instance.curPlayer.SwitchState(PlayerState.CancleUI);
+            GameManager.Instance.curPlayer.SwitchState(PlayerState.EndAnyAction);
         }
         else
         {
@@ -222,6 +232,15 @@ public class UIManager : Singleton<UIManager>
 
     #endregion
 
+    #region GenerateText
+    public GameObject GenerateText(string text)
+    {
+        GameObject obj = Instantiate(textPrefab, textParent);
+        TextMeshProUGUI tmpro = obj.GetComponent<TextMeshProUGUI>();
+        tmpro.text = text;
+        return obj;
+    }
 
+    #endregion
 
 }

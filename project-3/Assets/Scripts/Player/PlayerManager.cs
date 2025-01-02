@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum PlayerState
 {
-    Normal, Injury, ShowUI, CancleUI, Draging
+    Normal, Injury, ShowUI, EndAnyAction, Draging
 }
 
 public class PlayerManager : MonoBehaviour, IDamageable
@@ -20,7 +20,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
     [HideInInspector] public float curSpeed;
 
     [Header("===== PlayerState =====")]
-    PlayerState playerState;
+    [SerializeField] PlayerState playerState;
 
     public int maxHP { get; set; }
     public int curHP { get; set; }
@@ -38,6 +38,9 @@ public class PlayerManager : MonoBehaviour, IDamageable
     [Header("===== HandSlot =====")]
     public ItemSlot handSlot_1 = new ItemSlot();
     public ItemSlot handSlot_2 = new ItemSlot();
+
+    [Header("===== Drag =====")]
+    [HideInInspector] public IDragable curDragObject;
 
     public void Setup()
     {
@@ -72,6 +75,8 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     void RotationHandle()
     {
+        if (IsState(PlayerState.Draging)) return;
+
         Vector3 targetDir = Vector3.zero;
         targetDir = Camera.main.transform.forward * GameManager.Instance.moveInput.y;
         targetDir = targetDir + Camera.main.transform.right * GameManager.Instance.moveInput.x;
@@ -87,6 +92,19 @@ public class PlayerManager : MonoBehaviour, IDamageable
         }
     }
 
+    public void TeleportPlayer(Vector3 pos)
+    {
+        transform.position = pos;
+    }
+
+    public void LookAt(Vector3 pos)
+    {
+        Vector3 dir = (pos - transform.position).normalized;
+        float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+
+        transform.rotation = Quaternion.Euler(0f, angle, 0f);
+    }
+
     #endregion
 
     #region Interactive
@@ -99,7 +117,8 @@ public class PlayerManager : MonoBehaviour, IDamageable
             if (interactivCol.Length > 0)
             {
                 Collider targetCol = interactivCol[0];
-                if (targetCol.TryGetComponent<IActionObject>(out IActionObject iaction))
+                if (targetCol.TryGetComponent<IActionObject>(out IActionObject iaction) ||
+                    targetCol.TryGetComponent<IDragable>(out IDragable idragable))
                 {
                     UIManager.Instance.ShowInteractiveKey(targetCol.transform.position);
                     GameManager.Instance.curInteractiveObj = targetCol.gameObject;
@@ -146,7 +165,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
                 break;
             case PlayerState.ShowUI:
                 break;
-            case PlayerState.CancleUI:
+            case PlayerState.EndAnyAction:
                 SwitchState(PlayerState.Normal);
                 break;
             case PlayerState.Draging:

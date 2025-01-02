@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class StorageObject : MonoBehaviour, IActionObject
+public class StorageObject : IDragable, IActionObject
 {
     public List<ItemSlot> slots = new List<ItemSlot>();
 
+    private void Update()
+    {
+        OnDraging();
+    }
+
+    #region Action
     public void Action()
     {
         GameManager.Instance.curStorageObj = this;
@@ -17,6 +23,9 @@ public class StorageObject : MonoBehaviour, IActionObject
     {
         return $"Search";
     }
+    #endregion
+
+    #region Storage
 
     public void AddItem(ItemSO item, int count)
     {
@@ -125,5 +134,7 @@ public class StorageObject : MonoBehaviour, IActionObject
         itemIndex = -1;
         return false;
     }
+
+    #endregion
 
 }

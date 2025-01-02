@@ -226,6 +226,7 @@ MonoBehaviour:
   injurySpeed: 3
   dragingSpeed: 3
   curSpeed: 0
+  playerState: 0
   maxHungry: 10
   curHungry: 0
   maxThirsty: 10
@@ -234,6 +235,18 @@ MonoBehaviour:
   interactiveMask:
     serializedVersion: 2
     m_Bits: 64
+  handSlot_1:
+    item: {fileID: 0}
+    count: 0
+    maxValue: 0
+    curValue: 0
+  handSlot_2:
+    item: {fileID: 0}
+    count: 0
+    maxValue: 0
+    curValue: 0
+  dragingOffset: {fileID: 0}
+  curDragObject: {fileID: 0}
 --- !u!136 &7661242239389301900
 CapsuleCollider:
   m_ObjectHideFlags: 0
