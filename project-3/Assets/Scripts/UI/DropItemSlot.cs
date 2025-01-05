@@ -52,7 +52,8 @@ public class DropItemSlot : MonoBehaviour, IDropHandler
                 {
                     if (HasItemInSlot(out ItemSlotPrefab curItemSlotPrefabInSlot))
                     {
-                        GameManager.Instance.curStorageObj.AddItem(curItemSlotPrefabInSlot.curSlot);
+                        if (GameManager.Instance.curStorageObj != null)
+                            GameManager.Instance.curStorageObj.AddItem(curItemSlotPrefabInSlot.curSlot);
                     }
 
                     GameManager.Instance.curStorageObj.RemoveItem(itemSlotPrefab.curSlot.item, itemSlotPrefab.curSlot.count);
@@ -101,7 +102,8 @@ public class DropItemSlot : MonoBehaviour, IDropHandler
                 {
                     if (HasItemInSlot(out ItemSlotPrefab curItemSlotPrefabInSlot))
                     {
-                        GameManager.Instance.curStorageObj.AddItem(curItemSlotPrefabInSlot.curSlot);
+                        if (GameManager.Instance.curStorageObj != null)
+                            GameManager.Instance.curStorageObj.AddItem(curItemSlotPrefabInSlot.curSlot);
                     }
 
                     GameManager.Instance.curStorageObj.RemoveItem(itemSlotPrefab.curSlot.item, itemSlotPrefab.curSlot.count);
@@ -143,7 +145,8 @@ public class DropItemSlot : MonoBehaviour, IDropHandler
 
                     if (itemSlotPrefab.GetLastParent() == UIManager.Instance.storageParent)
                     {
-                        GameManager.Instance.curStorageObj.RemoveItem(itemSlotPrefab.curSlot.item, itemSlotPrefab.curSlot.count);
+                        if (GameManager.Instance.curStorageObj != null)
+                            GameManager.Instance.curStorageObj.RemoveItem(itemSlotPrefab.curSlot.item, itemSlotPrefab.curSlot.count);
                     }
 
                     GameManager.Instance.playerInventory.AddItem(itemSlotPrefab.curSlot);
@@ -176,7 +179,8 @@ public class DropItemSlot : MonoBehaviour, IDropHandler
                         GameManager.Instance.playerInventory.RemoveItem(itemSlotPrefab.curSlot.item, itemSlotPrefab.curSlot.count);
                     }
 
-                    GameManager.Instance.curStorageObj.AddItem(itemSlotPrefab.curSlot);
+                    if (GameManager.Instance.curStorageObj != null)
+                        GameManager.Instance.curStorageObj.AddItem(itemSlotPrefab.curSlot);
 
                 }
 
@@ -192,7 +196,7 @@ public class DropItemSlot : MonoBehaviour, IDropHandler
         DropAction(itemSlotPrefab);
     }
 
-    bool HasItemInSlot(out ItemSlotPrefab itemSlotPrefab)
+    public bool HasItemInSlot(out ItemSlotPrefab itemSlotPrefab)
     {
         if (transform.childCount > 0)
         {

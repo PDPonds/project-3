@@ -131,14 +131,53 @@ public class UIManager : Singleton<UIManager>
         {
             GameObject actionChoice = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
             InteractiveChoicePrefab choice = actionChoice.GetComponent<InteractiveChoicePrefab>();
-            choice.Setup(actionObject);
+            choice.Setup(actionObject, () => { return true; });
         }
 
         if (interactiveObj.TryGetComponent<IDragable>(out IDragable dragable))
         {
             GameObject actionChoice = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
             InteractiveChoicePrefab choice = actionChoice.GetComponent<InteractiveChoicePrefab>();
-            choice.Setup(dragable);
+            choice.Setup(dragable, () => { return true; });
+        }
+
+        if (interactiveObj.TryGetComponent<VehicleObject>(out VehicleObject vehicleObject))
+        {
+            GameObject actionChoice_drive = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
+            InteractiveChoicePrefab choice_drive = actionChoice_drive.GetComponent<InteractiveChoicePrefab>();
+            choice_drive.Setup("Drive", vehicleObject.onDrive, () => { return true; });
+
+            GameObject actionChoice_fillGas = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
+            InteractiveChoicePrefab choice_fillGas = actionChoice_fillGas.GetComponent<InteractiveChoicePrefab>();
+            choice_fillGas.Setup("Fill Gas", vehicleObject.onFillGas, () =>
+            {
+                if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlot))
+                {
+                    if (itemSlot.curSlot.item is GasTankItemSO gasTank &&
+                    itemSlot.curSlot.curValue > 0)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+
+            GameObject actionChoice_repair = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
+            InteractiveChoicePrefab choice_repair = actionChoice_repair.GetComponent<InteractiveChoicePrefab>();
+            choice_repair.Setup("Repair", vehicleObject.onRepair, () =>
+            {
+                if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlot))
+                {
+                    if (itemSlot.curSlot.item is GearBoxItemSO gasTank &&
+                    itemSlot.curSlot.curValue > 0)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
         }
 
     }
@@ -193,7 +232,8 @@ public class UIManager : Singleton<UIManager>
 
     public void UpdateStorage()
     {
-        InitItemSlotToParent(GameManager.Instance.curStorageObj.slots, storageParent);
+        if (GameManager.Instance.curStorageObj != null)
+            InitItemSlotToParent(GameManager.Instance.curStorageObj.slots, storageParent);
     }
 
     public void ToggleInventory(ShowInventoryType showType)
@@ -202,6 +242,7 @@ public class UIManager : Singleton<UIManager>
         {
             inventoryPanel.SetActive(false);
             ShowPlayerStatusPanel();
+            GameManager.Instance.curStorageObj = null;
             GameManager.Instance.curPlayer.SwitchState(PlayerState.EndAnyAction);
         }
         else

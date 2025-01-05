@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public abstract class IDragable : MonoBehaviour
+public class IDragable : MonoBehaviour
 {
     Rigidbody rb;
     Vector3 moveDir;
@@ -10,6 +10,11 @@ public abstract class IDragable : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+    }
+    
+    private void Update()
+    {
+        OnDraging();
     }
 
     public void BeginDrag()

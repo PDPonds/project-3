@@ -83,12 +83,6 @@ public class GameManager : Singleton<GameManager>
             return;
         }
 
-        if (curPlayer.IsState(PlayerState.ShowUI))
-        {
-            UIManager.Instance.GenerateText("UI Active", 2f);
-            return;
-        }
-
         switch (handSlot)
         {
             case 1:

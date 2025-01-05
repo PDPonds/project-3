@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76b20e02601498e4892a66ea6aee15a2, type: 3}
+  m_Name: TestGas
+  m_EditorClassIdentifier: 
+  itemID: 0
+  itemName: Gas
+  itemIcon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  itemWeigth: 0.1
+  Min_Max_ItemCost: {x: 1, y: 2}
+  itemPrefab: {fileID: 0}
+  itemStackable: 0
+  itemCanHoldInHand: 1
+  itemType: 2
+  fillAmount: 2
+  fillDuration: 1
+  maxGas: 10

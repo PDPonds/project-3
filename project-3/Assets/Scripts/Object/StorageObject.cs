@@ -1,16 +1,11 @@
 
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class StorageObject : IDragable, IActionObject
+public class StorageObject : MonoBehaviour, IActionObject
 {
+    public string actionName;
     public List<ItemSlot> slots = new List<ItemSlot>();
-
-    private void Update()
-    {
-        OnDraging();
-    }
 
     #region Action
     public void Action()
@@ -21,7 +16,7 @@ public class StorageObject : IDragable, IActionObject
 
     public string ActionName()
     {
-        return $"Search";
+        return actionName;
     }
     #endregion
 

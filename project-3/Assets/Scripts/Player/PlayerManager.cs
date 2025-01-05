@@ -118,7 +118,8 @@ public class PlayerManager : MonoBehaviour, IDamageable
             {
                 Collider targetCol = interactivCol[0];
                 if (targetCol.TryGetComponent<IActionObject>(out IActionObject iaction) ||
-                    targetCol.TryGetComponent<IDragable>(out IDragable idragable))
+                    targetCol.TryGetComponent<IDragable>(out IDragable idragable) ||
+                    targetCol.TryGetComponent<VehicleObject>(out VehicleObject vehicle))
                 {
                     UIManager.Instance.ShowInteractiveKey(targetCol.transform.position);
                     GameManager.Instance.curInteractiveObj = targetCol.gameObject;

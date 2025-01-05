@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 378007298388513294}
   - component: {fileID: 5905017631911228596}
   - component: {fileID: 74911294532878104}
+  - component: {fileID: 6972071301881063067}
   m_Layer: 6
   m_Name: Storage
   m_TagString: Untagged
@@ -95,12 +96,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96f8d0db40eb8b4e8c486b32b050a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDraging: 0
+  actionName: Search
   slots:
   - item: {fileID: 11400000, guid: 9a9ceff139c45b743a69fe9ab82d7886, type: 2}
     count: 2
     maxValue: 0
     curValue: 0
+--- !u!114 &6972071301881063067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1945438376758771446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 759a9ed4323a6374e8d79a868a0dc685, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDraging: 0
 --- !u!1 &2883954756929600831
 GameObject:
   m_ObjectHideFlags: 0
