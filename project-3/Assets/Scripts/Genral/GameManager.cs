@@ -83,6 +83,11 @@ public class GameManager : Singleton<GameManager>
             return;
         }
 
+        if (curPlayer.IsState(PlayerState.Action))
+        {
+            curPlayer.SwitchState(PlayerState.EndAnyAction);
+        }
+
         switch (handSlot)
         {
             case 1:

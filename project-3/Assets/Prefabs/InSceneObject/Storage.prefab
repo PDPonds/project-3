@@ -97,11 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: Search
-  slots:
-  - item: {fileID: 11400000, guid: 9a9ceff139c45b743a69fe9ab82d7886, type: 2}
-    count: 2
-    maxValue: 0
-    curValue: 0
+  slots: []
 --- !u!114 &6972071301881063067
 MonoBehaviour:
   m_ObjectHideFlags: 0

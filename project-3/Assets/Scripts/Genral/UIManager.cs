@@ -41,6 +41,9 @@ public class UIManager : Singleton<UIManager>
     [Header("===== Generate Text =====")]
     [SerializeField] Transform textParent;
     [SerializeField] GameObject textPrefab;
+    [Header("===== Action Duration =====")]
+    [SerializeField] GameObject actionDurationBorder;
+    [SerializeField] Image actionDurationFill;
 
     private void Awake()
     {
@@ -51,6 +54,14 @@ public class UIManager : Singleton<UIManager>
     private void Start()
     {
         ShowPlayerStatusPanel();
+    }
+
+    private void Update()
+    {
+        if (GameManager.Instance.curPlayer.IsState(PlayerState.Action))
+        {
+            UpdateActionDurationFill(GameManager.Instance.curPlayer.actionTime, GameManager.Instance.curPlayer.maxActionTime);
+        }
     }
 
     public void ClearParent(Transform parent)
@@ -169,7 +180,7 @@ public class UIManager : Singleton<UIManager>
             {
                 if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlot))
                 {
-                    if (itemSlot.curSlot.item is GearBoxItemSO gasTank &&
+                    if (itemSlot.curSlot.item is GearBoxItemSO gearBox &&
                     itemSlot.curSlot.curValue > 0)
                     {
                         return true;
@@ -286,5 +297,21 @@ public class UIManager : Singleton<UIManager>
     }
 
     #endregion
+
+    public void ShowActionDuration()
+    {
+        actionDurationBorder.SetActive(true);
+    }
+
+    public void HideActionDuration()
+    {
+        actionDurationBorder.SetActive(false);
+    }
+
+    void UpdateActionDurationFill(float c, float m)
+    {
+        float p = c / m;
+        actionDurationFill.fillAmount = p;
+    }
 
 }

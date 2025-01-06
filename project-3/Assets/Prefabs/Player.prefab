@@ -220,11 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b2ded3d90f3c754ba75840dc622c91f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 5
-  walkSpeed: 5
-  runSpeed: 7
-  injurySpeed: 3
-  dragingSpeed: 3
+  playerDatas: {fileID: 11400000, guid: 31a7eb915579f1244a1c6c6a0891ab61, type: 2}
   curSpeed: 0
   playerState: 0
   maxHungry: 10
@@ -245,8 +241,8 @@ MonoBehaviour:
     count: 0
     maxValue: 0
     curValue: 0
-  dragingOffset: {fileID: 0}
   curDragObject: {fileID: 0}
+  actionTime: 0
 --- !u!136 &7661242239389301900
 CapsuleCollider:
   m_ObjectHideFlags: 0

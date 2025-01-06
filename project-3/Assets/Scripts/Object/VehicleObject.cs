@@ -49,8 +49,8 @@ public class VehicleObject : MonoBehaviour, IDamageable
     private void Start()
     {
         onDrive += Drive;
-        onFillGas += FillGas;
-        onRepair += Repair;
+        onFillGas += StartFillGas;
+        onRepair += StartRepair;
     }
 
     void Drive()
@@ -58,9 +58,34 @@ public class VehicleObject : MonoBehaviour, IDamageable
         Debug.Log("Drive");
     }
 
+    void StartFillGas()
+    {
+        if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlot))
+        {
+            if (itemSlot.curSlot.item is GasTankItemSO gasTank &&
+            itemSlot.curSlot.curValue > 0)
+            {
+                GameManager.Instance.curPlayer.SwitchToActionState(gasTank.fillDuration, FillGas);
+            }
+        }
+    }
+
     void FillGas()
     {
         Debug.Log("Fill Gas");
+    }
+
+    void StartRepair()
+    {
+        if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlot))
+        {
+            if (itemSlot.curSlot.item is GearBoxItemSO gearBox &&
+            itemSlot.curSlot.curValue > 0)
+            {
+                GameManager.Instance.curPlayer.SwitchToActionState(gearBox.repairDuration, Repair);
+
+            }
+        }
     }
 
     void Repair()

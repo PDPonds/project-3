@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 public enum PlayerState
 {
-    Normal, Injury, ShowUI, EndAnyAction, Draging
+    Normal, Injury, ShowUI, EndAnyAction, Draging, Action
 }
 
 public class PlayerManager : MonoBehaviour, IDamageable
@@ -10,13 +11,8 @@ public class PlayerManager : MonoBehaviour, IDamageable
     Vector3 moveDir;
     Rigidbody rb;
 
-    [SerializeField] float rotationSpeed;
+    public PlayerDatas playerDatas;
 
-    [Header("===== Move Speed =====")]
-    [SerializeField] float walkSpeed;
-    [SerializeField] float runSpeed;
-    [SerializeField] float injurySpeed;
-    [SerializeField] float dragingSpeed;
     [HideInInspector] public float curSpeed;
 
     [Header("===== PlayerState =====")]
@@ -25,15 +21,8 @@ public class PlayerManager : MonoBehaviour, IDamageable
     public int maxHP { get; set; }
     public int curHP { get; set; }
 
-    [SerializeField] int maxHungry;
     [SerializeField] int curHungry;
-
-    [SerializeField] int maxThirsty;
     [SerializeField] int curThirsty;
-
-    [Header("===== Interactive =====")]
-    [SerializeField] float interactiveRange;
-    [SerializeField] LayerMask interactiveMask;
 
     [Header("===== HandSlot =====")]
     public ItemSlot handSlot_1 = new ItemSlot();
@@ -41,6 +30,11 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     [Header("===== Drag =====")]
     [HideInInspector] public IDragable curDragObject;
+
+    [Header("===== Action =====")]
+    [HideInInspector] public float maxActionTime;
+    [HideInInspector] public float actionTime;
+    public event Action onAction;
 
     public void Setup()
     {
@@ -75,7 +69,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     void RotationHandle()
     {
-        if (IsState(PlayerState.Draging)) return;
+        if (IsState(PlayerState.Draging) || IsState(PlayerState.Action) || IsState(PlayerState.ShowUI)) return;
 
         Vector3 targetDir = Vector3.zero;
         targetDir = Camera.main.transform.forward * GameManager.Instance.moveInput.y;
@@ -86,7 +80,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
         if (targetDir != Vector3.zero)
         {
             Quaternion targetRot = Quaternion.LookRotation(targetDir);
-            Quaternion playerRot = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+            Quaternion playerRot = Quaternion.Slerp(transform.rotation, targetRot, playerDatas.rotationSpeed * Time.deltaTime);
 
             transform.rotation = playerRot;
         }
@@ -113,7 +107,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
     {
         if (IsState(PlayerState.Normal) || IsState(PlayerState.Injury))
         {
-            Collider[] interactivCol = Physics.OverlapSphere(transform.position, interactiveRange, interactiveMask);
+            Collider[] interactivCol = Physics.OverlapSphere(transform.position, playerDatas.interactiveRange, playerDatas.interactiveMask);
             if (interactivCol.Length > 0)
             {
                 Collider targetCol = interactivCol[0];
@@ -153,23 +147,25 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     #endregion
 
-    #region Person State
+    #region Player State
+
+    public void SwitchToActionState(float duration, Action action)
+    {
+        onAction = null;
+        onAction += action;
+        actionTime = duration;
+        maxActionTime = duration;
+        SwitchState(PlayerState.Action);
+        UIManager.Instance.ShowActionDuration();
+    }
 
     public void SwitchState(PlayerState state)
     {
         playerState = state;
         switch (playerState)
         {
-            case PlayerState.Normal:
-                break;
-            case PlayerState.Injury:
-                break;
-            case PlayerState.ShowUI:
-                break;
             case PlayerState.EndAnyAction:
                 SwitchState(PlayerState.Normal);
-                break;
-            case PlayerState.Draging:
                 break;
         }
     }
@@ -180,13 +176,13 @@ public class PlayerManager : MonoBehaviour, IDamageable
         {
             case PlayerState.Normal:
 
-                if (GameManager.Instance.isRunning) curSpeed = runSpeed;
-                else curSpeed = walkSpeed;
+                if (GameManager.Instance.isRunning) curSpeed = playerDatas.runSpeed;
+                else curSpeed = playerDatas.walkSpeed;
 
                 break;
             case PlayerState.Injury:
 
-                curSpeed = injurySpeed;
+                curSpeed = playerDatas.injurySpeed;
 
                 break;
             case PlayerState.ShowUI:
@@ -194,7 +190,29 @@ public class PlayerManager : MonoBehaviour, IDamageable
                 break;
             case PlayerState.Draging:
 
-                curSpeed = dragingSpeed;
+                curSpeed = playerDatas.dragingSpeed;
+
+                break;
+            case PlayerState.Action:
+
+                curSpeed = 0;
+
+                if (actionTime > 0)
+                {
+                    actionTime -= Time.deltaTime;
+                    if (actionTime <= 0)
+                    {
+                        onAction?.Invoke();
+                        UIManager.Instance.HideActionDuration();
+                        SwitchState(PlayerState.EndAnyAction);
+                    }
+                }
+
+                if (GameManager.Instance.moveInput != Vector2.zero)
+                {
+                    UIManager.Instance.HideActionDuration();
+                    SwitchState(PlayerState.EndAnyAction);
+                }
 
                 break;
         }
@@ -243,7 +261,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
     #region Hungry And Thirsty
     public void ResetHungry()
     {
-        curHungry = maxHungry;
+        curHungry = playerDatas.maxHungry;
     }
 
     public void DecreaseHungry(int amount)
@@ -258,7 +276,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
     public void IncreaseHungry(int amount)
     {
         curHungry += amount;
-        if (curHungry >= maxHungry)
+        if (curHungry >= playerDatas.maxHungry)
         {
             ResetHungry();
         }
@@ -266,7 +284,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     public void ResetThirsty()
     {
-        curThirsty = maxThirsty;
+        curThirsty = playerDatas.maxThirsty;
     }
 
     public void DecreaseThirsty(int amount)
@@ -281,7 +299,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
     public void IncreaseThirsty(int amount)
     {
         curThirsty += amount;
-        if (curThirsty >= maxThirsty)
+        if (curThirsty >= playerDatas.maxThirsty)
         {
             ResetThirsty();
         }
@@ -296,6 +314,18 @@ public class PlayerManager : MonoBehaviour, IDamageable
             curDragObject.EndDrag();
             return;
         }
+
+        if (IsState(PlayerState.ShowUI))
+        {
+            return;
+        }
+
+        if (IsState(PlayerState.Action))
+        {
+            UIManager.Instance.HideActionDuration();
+            SwitchState(PlayerState.EndAnyAction);
+        }
+
     }
 
     #endregion
@@ -309,6 +339,71 @@ public class PlayerManager : MonoBehaviour, IDamageable
             curDragObject.EndDrag();
             return;
         }
+
+        if (IsState(PlayerState.Action))
+        {
+            UIManager.Instance.HideActionDuration();
+            SwitchState(PlayerState.EndAnyAction);
+        }
+
+        if (IsState(PlayerState.ShowUI))
+        {
+            return;
+        }
+
+        if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlotPrefab))
+        {
+            if (itemSlotPrefab.curSlot.item is FoodItemSO food)
+            {
+                SwitchToActionState(food.eatDuration, EatFood);
+            }
+            else if (itemSlotPrefab.curSlot.item is DrinkItemSO drink)
+            {
+                SwitchToActionState(drink.drinkDuration, DrinkWater);
+            }
+            else if (itemSlotPrefab.curSlot.item is HealItemSO healItem)
+            {
+                SwitchToActionState(healItem.healDuration, UseHeal);
+            }
+            else if (itemSlotPrefab.curSlot.item is RangeWeaponItemSO rangeWeapon)
+            {
+                Debug.Log("Aim");
+            }
+        }
+
+    }
+
+    void EatFood()
+    {
+        if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlotPrefab))
+        {
+            if (itemSlotPrefab.curSlot.item is FoodItemSO food)
+            {
+                Debug.Log("Eat");
+            }
+        }
+    }
+
+    void DrinkWater()
+    {
+        if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlotPrefab))
+        {
+            if (itemSlotPrefab.curSlot.item is DrinkItemSO drink)
+            {
+                Debug.Log("Drink");
+            }
+        }
+    }
+
+    void UseHeal()
+    {
+        if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlotPrefab))
+        {
+            if (itemSlotPrefab.curSlot.item is HealItemSO healItem)
+            {
+                Debug.Log("Heal");
+            }
+        }
     }
 
     #endregion
@@ -316,7 +411,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, interactiveRange);
+        Gizmos.DrawWireSphere(transform.position, playerDatas.interactiveRange);
     }
 
 }
