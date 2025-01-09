@@ -28,6 +28,10 @@ public class PlayerManager : MonoBehaviour, IDamageable
     public ItemSlot handSlot_1 = new ItemSlot();
     public ItemSlot handSlot_2 = new ItemSlot();
 
+    [Header("==== Attack =====")]
+    float curAttackDelay;
+    [HideInInspector] public bool isAim;
+
     [Header("===== Drag =====")]
     [HideInInspector] public IDragable curDragObject;
 
@@ -45,6 +49,8 @@ public class PlayerManager : MonoBehaviour, IDamageable
     private void Update()
     {
         UpdateState();
+
+        DecreaseAttackDelay();
 
         MoveHandle();
         RotationHandle();
@@ -307,24 +313,91 @@ public class PlayerManager : MonoBehaviour, IDamageable
     #endregion
 
     #region Attack
+    void DecreaseAttackDelay()
+    {
+        if (curAttackDelay > 0)
+        {
+            curAttackDelay -= Time.deltaTime;
+            if (curAttackDelay <= 0)
+            {
+                curAttackDelay = 0;
+            }
+        }
+    }
+
     public void Attack()
     {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+
         if (IsState(PlayerState.Draging))
         {
             curDragObject.EndDrag();
             return;
         }
 
-        if (IsState(PlayerState.ShowUI))
-        {
-            return;
-        }
+        if (IsState(PlayerState.ShowUI)) return;
 
         if (IsState(PlayerState.Action))
         {
             UIManager.Instance.HideActionDuration();
             SwitchState(PlayerState.EndAnyAction);
         }
+
+        if (curAttackDelay <= 0)
+        {
+            TryAttack();
+        }
+
+    }
+
+    void TryAttack()
+    {
+        if (isAim)
+        {
+            if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlotPrefab))
+            {
+                if (itemSlotPrefab.curSlot.item is GunWeaponItemSO gun)
+                {
+                    curAttackDelay = gun.attackDelay;
+                    GunAttack(gun);
+                }
+                else if (itemSlotPrefab.curSlot.item is ThrowingWeaponItemSO throwing)
+                {
+                    curAttackDelay = throwing.attackDelay;
+                    ThrowingAttack(throwing);
+                }
+                else
+                {
+                    curAttackDelay = itemSlotPrefab.curSlot.item.attackDelay;
+                    MeleeAttack();
+                }
+            }
+            else
+            {
+                isAim = false;
+                curAttackDelay = playerDatas.attackDelay;
+                MeleeAttack();
+            }
+        }
+        else
+        {
+            curAttackDelay = playerDatas.attackDelay;
+            MeleeAttack();
+        }
+    }
+
+    void MeleeAttack()
+    {
+
+    }
+
+    void GunAttack(GunWeaponItemSO gun)
+    {
+
+    }
+
+    void ThrowingAttack(ThrowingWeaponItemSO throwing)
+    {
 
     }
 
@@ -334,6 +407,8 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     public void UseItem()
     {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+
         if (IsState(PlayerState.Draging))
         {
             curDragObject.EndDrag();
@@ -367,7 +442,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
             }
             else if (itemSlotPrefab.curSlot.item is RangeWeaponItemSO rangeWeapon)
             {
-                Debug.Log("Aim");
+                isAim = !isAim;
             }
         }
 

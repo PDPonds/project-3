@@ -55,7 +55,7 @@ public class VehicleObject : MonoBehaviour, IDamageable
 
     void Drive()
     {
-        Debug.Log("Drive");
+        GameManager.Instance.SwitchPhase(GamePhase.EndGame);
     }
 
     void StartFillGas()

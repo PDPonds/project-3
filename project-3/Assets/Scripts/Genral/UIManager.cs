@@ -44,11 +44,17 @@ public class UIManager : Singleton<UIManager>
     [Header("===== Action Duration =====")]
     [SerializeField] GameObject actionDurationBorder;
     [SerializeField] Image actionDurationFill;
+    [Header("===== Select Map =====")]
+    [SerializeField] Transform selectMapPanel;
+    [SerializeField] Button driveButton;
 
     private void Awake()
     {
         Button border = interactiveChoiceBorder.GetComponent<Button>();
         border.onClick.AddListener(CloseInteractiveChoice);
+
+        driveButton.onClick.AddListener(DriveButton);
+
     }
 
     private void Start()
@@ -58,9 +64,12 @@ public class UIManager : Singleton<UIManager>
 
     private void Update()
     {
-        if (GameManager.Instance.curPlayer.IsState(PlayerState.Action))
+        if (GameManager.Instance.IsPhase(GamePhase.DuringGame))
         {
-            UpdateActionDurationFill(GameManager.Instance.curPlayer.actionTime, GameManager.Instance.curPlayer.maxActionTime);
+            if (GameManager.Instance.curPlayer.IsState(PlayerState.Action))
+            {
+                UpdateActionDurationFill(GameManager.Instance.curPlayer.actionTime, GameManager.Instance.curPlayer.maxActionTime);
+            }
         }
     }
 
@@ -77,19 +86,21 @@ public class UIManager : Singleton<UIManager>
 
     #region PlayerStatusPanel
 
-    void ShowPlayerStatusPanel()
+    public void ShowPlayerStatusPanel()
     {
         playerStatusPanel.gameObject.SetActive(true);
         UpdatePlayerStatus();
     }
 
-    void HidePlayerStatusPanel()
+    public void HidePlayerStatusPanel()
     {
         playerStatusPanel.gameObject.SetActive(false);
     }
 
     public void UpdatePlayerStatus()
     {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+
         InitItemSlotToParent(GameManager.Instance.curPlayer.handSlot_1, playerStatus_HandSlot_1_Border);
         InitItemSlotToParent(GameManager.Instance.curPlayer.handSlot_2, playerStatus_HandSlot_2_Border);
         Image img_1 = playerStatus_HandSlot_1_Border.GetComponent<Image>();
@@ -127,6 +138,8 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowInteractiveChoice()
     {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+
         GameObject interactiveObj = GameManager.Instance.curInteractiveObj;
         if (interactiveObj == null) return;
 
@@ -249,6 +262,8 @@ public class UIManager : Singleton<UIManager>
 
     public void ToggleInventory(ShowInventoryType showType)
     {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+
         if (inventoryPanel.activeSelf)
         {
             inventoryPanel.SetActive(false);
@@ -298,6 +313,7 @@ public class UIManager : Singleton<UIManager>
 
     #endregion
 
+    #region Action
     public void ShowActionDuration()
     {
         actionDurationBorder.SetActive(true);
@@ -313,5 +329,24 @@ public class UIManager : Singleton<UIManager>
         float p = c / m;
         actionDurationFill.fillAmount = p;
     }
+    #endregion
+
+    #region SelectMap
+    public void ShowSelectMap()
+    {
+        selectMapPanel.gameObject.SetActive(true);
+    }
+
+    public void HideSelectMap()
+    {
+        selectMapPanel.gameObject.SetActive(false);
+    }
+
+    void DriveButton()
+    {
+        GameManager.Instance.SwitchPhase(GamePhase.GameStart);
+    }
+
+    #endregion
 
 }

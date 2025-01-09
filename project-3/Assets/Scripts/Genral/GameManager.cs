@@ -2,15 +2,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GamePhase
+{
+    SelectMap, GameStart, DuringGame, EndGame
+}
+
 public class GameManager : Singleton<GameManager>
 {
-
+    GamePhase phase;
     [Header("===== Init On Game Start ======")]
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject cameraPrefab;
     [Header("===== Player =====")]
     public InventorySO playerInventory;
     [HideInInspector] public PlayerManager curPlayer;
+    [HideInInspector] public CameraController curCameraController;
     [HideInInspector] public bool isRunning;
     [HideInInspector] public DropItemSlot curHandSlot;
     [Header("===== Player Interactive =====")]
@@ -21,29 +27,36 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public Vector2 mousePos;
     [HideInInspector] public Vector2 moveInput;
 
-    private void Awake()
-    {
-        InitGame();
-    }
-
     private void Start()
     {
-        SelectHandSlot(1);
+        SwitchPhase(GamePhase.SelectMap);
     }
 
+    private void Update()
+    {
+        UpdatePhase();
+    }
 
     #region Init On Game Start
 
-    void InitGame()
+    void InitPlayer()
     {
         GameObject player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         curPlayer = playerManager;
         playerManager.Setup();
 
+        curCameraController.Setup(player.transform);
+    }
+
+    void InitCamera(Transform target)
+    {
+        if (curCameraController != null) return;
+
         GameObject camera = Instantiate(cameraPrefab, Vector3.zero, Quaternion.identity);
         CameraController camControl = camera.GetComponent<CameraController>();
-        camControl.Setup(player.transform);
+        curCameraController = camControl;
+        camControl.Setup(target);
     }
 
     #endregion
@@ -77,6 +90,10 @@ public class GameManager : Singleton<GameManager>
 
     public void SelectHandSlot(int handSlot)
     {
+        if (!IsPhase(GamePhase.DuringGame)) return;
+
+        if (curPlayer.isAim) curPlayer.isAim = false;
+
         if (curPlayer.IsState(PlayerState.Draging))
         {
             UIManager.Instance.GenerateText("Draging", 2f);
@@ -100,6 +117,62 @@ public class GameManager : Singleton<GameManager>
 
         UIManager.Instance.UpdatePlayerStatus();
 
+    }
+
+    #endregion
+
+    #region Game Phase
+    public void SwitchPhase(GamePhase phase)
+    {
+        this.phase = phase;
+        switch (phase)
+        {
+            case GamePhase.SelectMap:
+                if (curPlayer != null)
+                {
+                    Destroy(curPlayer.gameObject);
+                }
+
+                InitCamera(transform);
+                UIManager.Instance.ShowSelectMap();
+
+                break;
+            case GamePhase.GameStart:
+                UIManager.Instance.HideSelectMap();
+                InitPlayer();
+                SwitchPhase(GamePhase.DuringGame);
+                break;
+            case GamePhase.DuringGame:
+                UIManager.Instance.ShowPlayerStatusPanel();
+                SelectHandSlot(1);
+                break;
+            case GamePhase.EndGame:
+                UIManager.Instance.HideActionDuration();
+                UIManager.Instance.HideInteractiveChoice();
+                UIManager.Instance.HideInteractiveKey();
+                SwitchPhase(GamePhase.SelectMap);
+                break;
+        }
+    }
+
+    void UpdatePhase()
+    {
+        switch (phase)
+        {
+            case GamePhase.SelectMap:
+                break;
+            case GamePhase.GameStart:
+                break;
+            case GamePhase.DuringGame:
+                break;
+            case GamePhase.EndGame:
+                break;
+        }
+    }
+
+    public bool IsPhase(GamePhase phase)
+    {
+        return this.phase == phase;
     }
 
     #endregion

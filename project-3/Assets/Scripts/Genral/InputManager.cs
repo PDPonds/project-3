@@ -22,9 +22,9 @@ public class InputManager : MonoBehaviour
             inputSystem.PlayerInput.Select_HandSlot_1.performed += i => GameManager.Instance.SelectHandSlot(1);
             inputSystem.PlayerInput.Select_HandSlot_2.performed += i => GameManager.Instance.SelectHandSlot(2);
 
-            inputSystem.PlayerInput.Attack.performed += i => GameManager.Instance.curPlayer.Attack();
+            inputSystem.PlayerInput.Attack.performed += i => AttackPerformed();
 
-            inputSystem.PlayerInput.UseItem.performed += i => GameManager.Instance.curPlayer.UseItem();
+            inputSystem.PlayerInput.UseItem.performed += i => UseItemPerformed();
 
         }
 
@@ -36,4 +36,15 @@ public class InputManager : MonoBehaviour
         inputSystem.Disable();
     }
 
+    public void AttackPerformed()
+    {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+        GameManager.Instance.curPlayer.Attack();
+    }
+
+    public void UseItemPerformed()
+    {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+        GameManager.Instance.curPlayer.UseItem();
+    }
 }
