@@ -10,11 +10,18 @@ public class ItemSO : ScriptableObject
     public int itemID;
     public string itemName;
     public Sprite itemIcon;
+    [Header("==== Weigth =====")]
     public float itemWeigth;
+    [Header("==== Cost =====")]
     public Vector2Int Min_Max_ItemCost;
+    [Header("==== Prefab =====")]
     public GameObject itemPrefab;
+    [Header("===== Stackable =====")]
     public bool itemStackable;
-    public bool itemCanHoldInHand;
+    [Header("==== Attack =====")]
+    public int damage;
+    public float attackDelay;
+    [Header("==== Type =====")]
     public ItemType itemType;
 
 

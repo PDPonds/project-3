@@ -18,8 +18,6 @@ public class DropItemSlot : MonoBehaviour, IDropHandler
         {
             case HandSlotType.Hand_1:
 
-                if (!itemSlotPrefab.curSlot.item.itemCanHoldInHand) return;
-
                 if (itemSlotPrefab.GetLastParent() == UIManager.Instance.inventoryParent)
                 {
                     if (HasItemInSlot(out ItemSlotPrefab curItemSlotPrefabInSlot))
@@ -66,8 +64,6 @@ public class DropItemSlot : MonoBehaviour, IDropHandler
 
                 break;
             case HandSlotType.Hand_2:
-
-                if (!itemSlotPrefab.curSlot.item.itemCanHoldInHand) return;
 
                 if (itemSlotPrefab.GetLastParent() == UIManager.Instance.inventoryParent)
                 {

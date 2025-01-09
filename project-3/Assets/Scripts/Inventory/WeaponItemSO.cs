@@ -8,13 +8,10 @@ public enum WeaponType
 
 public class WeaponItemSO : ItemSO
 {
-    public int damage;
-    public float attackDelay;
     public WeaponType weaponType;
 
     public WeaponItemSO()
     {
-        itemCanHoldInHand = true;
         itemType = ItemType.Weapon;
     }
 

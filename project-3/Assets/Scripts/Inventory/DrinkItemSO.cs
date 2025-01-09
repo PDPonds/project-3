@@ -9,7 +9,6 @@ public class DrinkItemSO : ItemSO
     public DrinkItemSO()
     {
         itemStackable = true;
-        itemCanHoldInHand = true;
         itemType = ItemType.Drink;
     }
 }

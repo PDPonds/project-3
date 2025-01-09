@@ -24,4 +24,13 @@ public class PlayerDatas : ScriptableObject
     public float interactiveRange;
     public LayerMask interactiveMask;
 
+    [Header("===== Player Attack =====")]
+    public float attackDelay;
+    [Header("- Melee Attack")]
+    public float meleeDamage;
+    public float meleeAttackRange;
+    public LayerMask meleeAttackMask;
+    public float attackMoveForce;
+    public float attackMoveDuration;
+
 }

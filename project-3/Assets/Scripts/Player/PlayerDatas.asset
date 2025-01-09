@@ -24,3 +24,11 @@ MonoBehaviour:
   interactiveMask:
     serializedVersion: 2
     m_Bits: 64
+  attackDelay: 1
+  meleeDamage: 1
+  meleeAttackRange: 2
+  meleeAttackMask:
+    serializedVersion: 2
+    m_Bits: 128
+  attackMoveForce: 0.1
+  attackMoveDuration: 0.25

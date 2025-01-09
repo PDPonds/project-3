@@ -19,7 +19,8 @@ MonoBehaviour:
   Min_Max_ItemCost: {x: 1, y: 2}
   itemPrefab: {fileID: 0}
   itemStackable: 0
-  itemCanHoldInHand: 1
+  damage: 1
+  attackDelay: 1
   itemType: 2
   fillAmount: 2
   fillDuration: 1

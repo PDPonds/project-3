@@ -8,7 +8,6 @@ public class GearBoxItemSO : ItemSO
 
     public GearBoxItemSO()
     {
-        itemCanHoldInHand = true;
         itemStackable = true;
         itemType = ItemType.GearBox;
     }

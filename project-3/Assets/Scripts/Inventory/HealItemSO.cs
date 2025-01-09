@@ -9,7 +9,6 @@ public class HealItemSO : ItemSO
     public HealItemSO()
     {
         itemStackable = true;
-        itemCanHoldInHand = true;
         itemType = ItemType.Heal;
     }
 }

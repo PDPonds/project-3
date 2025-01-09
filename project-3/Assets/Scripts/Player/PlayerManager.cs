@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public enum PlayerState
@@ -31,6 +32,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
     [Header("==== Attack =====")]
     float curAttackDelay;
     [HideInInspector] public bool isAim;
+    bool isAddForceState;
 
     [Header("===== Drag =====")]
     [HideInInspector] public IDragable curDragObject;
@@ -62,15 +64,16 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     void MoveHandle()
     {
-        moveDir = Camera.main.transform.forward * GameManager.Instance.moveInput.y;
-        moveDir = moveDir + Camera.main.transform.right * GameManager.Instance.moveInput.x;
-        moveDir.Normalize();
-        moveDir.y = 0;
-        moveDir = moveDir * curSpeed;
+        if (!isAddForceState)
+        {
+            moveDir = Camera.main.transform.forward * GameManager.Instance.moveInput.y;
+            moveDir = moveDir + Camera.main.transform.right * GameManager.Instance.moveInput.x;
+            moveDir.Normalize();
+            moveDir.y = 0;
+            moveDir = moveDir * curSpeed;
 
-
-        rb.linearVelocity = new Vector3(moveDir.x, rb.linearVelocity.y, moveDir.z);
-
+            rb.linearVelocity = new Vector3(moveDir.x, rb.linearVelocity.y, moveDir.z);
+        }
     }
 
     void RotationHandle()
@@ -103,6 +106,23 @@ public class PlayerManager : MonoBehaviour, IDamageable
         float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
 
         transform.rotation = Quaternion.Euler(0f, angle, 0f);
+    }
+
+    IEnumerator AddForce(Vector3 dir, float force, float duration)
+    {
+        if (!isAddForceState)
+        {
+            float startTime = Time.time;
+            while (Time.time < startTime + duration)
+            {
+                isAddForceState = true;
+                rb.AddForce(dir * force, ForceMode.Impulse);
+                yield return null;
+            }
+        }
+
+        yield return null;
+        isAddForceState = false;
     }
 
     #endregion
@@ -388,7 +408,31 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     void MeleeAttack()
     {
-
+        Collider[] cols = Physics.OverlapSphere(transform.position, playerDatas.meleeAttackRange, playerDatas.meleeAttackMask);
+        Vector3 mouseDir = GameManager.Instance.GetDirToMouse(transform.position);
+        Vector3 mousePos = GameManager.Instance.GetWorldPosFormMouse();
+        if (cols.Length > 0)
+        {
+            Collider col = cols[0];
+            if (col.TryGetComponent<EnemyManager>(out EnemyManager enemyManager))
+            {
+                Vector3 dirToEnemy = enemyManager.transform.position - transform.position;
+                dirToEnemy.Normalize();
+                LookAt(enemyManager.transform.position);
+                StartCoroutine(AddForce(dirToEnemy, playerDatas.attackMoveForce, playerDatas.attackMoveDuration));
+                //Enemy Take Damage
+            }
+            else
+            {
+                LookAt(mousePos);
+                StartCoroutine(AddForce(mouseDir, playerDatas.attackMoveForce, playerDatas.attackMoveDuration));
+            }
+        }
+        else
+        {
+            LookAt(mousePos);
+            StartCoroutine(AddForce(mouseDir, playerDatas.attackMoveForce, playerDatas.attackMoveDuration));
+        }
     }
 
     void GunAttack(GunWeaponItemSO gun)
@@ -487,6 +531,8 @@ public class PlayerManager : MonoBehaviour, IDamageable
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, playerDatas.interactiveRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, playerDatas.meleeAttackRange);
     }
 
 }
