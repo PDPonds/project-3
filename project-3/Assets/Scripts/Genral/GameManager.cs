@@ -115,6 +115,11 @@ public class GameManager : Singleton<GameManager>
                 break;
         }
 
+        if (curHandSlot.HasItemInSlot(out ItemSlotPrefab slotPrefab) && slotPrefab.curSlot.item is GunWeaponItemSO gun)
+        {
+            curPlayer.reloadTime = gun.reloadTime;
+        }
+
         UIManager.Instance.UpdatePlayerStatus();
 
     }

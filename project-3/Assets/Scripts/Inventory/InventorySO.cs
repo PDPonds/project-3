@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 [CreateAssetMenu(fileName = "InventorySO", menuName = "Scriptable Objects/InventorySO")]
 public class InventorySO : ScriptableObject
@@ -143,6 +142,8 @@ public class ItemSlot
 
     public float maxValue;
     public float curValue;
+
+    public int curMag;
 
     public float GetSlotWeight()
     {

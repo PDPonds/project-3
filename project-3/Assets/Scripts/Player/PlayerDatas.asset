@@ -25,7 +25,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   attackDelay: 1
-  meleeDamage: 1
+  meleeDamage: 0.75
   meleeAttackRange: 2
   meleeAttackMask:
     serializedVersion: 2

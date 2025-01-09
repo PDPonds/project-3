@@ -23,6 +23,7 @@ public class InputManager : MonoBehaviour
             inputSystem.PlayerInput.Select_HandSlot_2.performed += i => GameManager.Instance.SelectHandSlot(2);
 
             inputSystem.PlayerInput.Attack.performed += i => AttackPerformed();
+            inputSystem.PlayerInput.Attack.canceled += i => AttackCancle();
 
             inputSystem.PlayerInput.UseItem.performed += i => UseItemPerformed();
 
@@ -39,7 +40,13 @@ public class InputManager : MonoBehaviour
     public void AttackPerformed()
     {
         if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
-        GameManager.Instance.curPlayer.Attack();
+        GameManager.Instance.curPlayer.isAttack = true;
+    }
+
+    public void AttackCancle()
+    {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+        GameManager.Instance.curPlayer.isAttack = false;
     }
 
     public void UseItemPerformed()

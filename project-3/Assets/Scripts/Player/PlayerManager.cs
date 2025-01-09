@@ -30,9 +30,12 @@ public class PlayerManager : MonoBehaviour, IDamageable
     public ItemSlot handSlot_2 = new ItemSlot();
 
     [Header("==== Attack =====")]
+    [HideInInspector] public bool isAttack;
+    [SerializeField] Transform bulletSpawnPoint;
     float curAttackDelay;
     [HideInInspector] public bool isAim;
     bool isAddForceState;
+    [HideInInspector] public float reloadTime;
 
     [Header("===== Drag =====")]
     [HideInInspector] public IDragable curDragObject;
@@ -58,6 +61,9 @@ public class PlayerManager : MonoBehaviour, IDamageable
         RotationHandle();
 
         CheckInteractive();
+
+        Attack();
+        Reload();
     }
 
     #region Movement
@@ -80,18 +86,25 @@ public class PlayerManager : MonoBehaviour, IDamageable
     {
         if (IsState(PlayerState.Draging) || IsState(PlayerState.Action) || IsState(PlayerState.ShowUI)) return;
 
-        Vector3 targetDir = Vector3.zero;
-        targetDir = Camera.main.transform.forward * GameManager.Instance.moveInput.y;
-        targetDir = targetDir + Camera.main.transform.right * GameManager.Instance.moveInput.x;
-        targetDir.Normalize();
-        targetDir.y = 0;
-
-        if (targetDir != Vector3.zero)
+        if (!isAim)
         {
-            Quaternion targetRot = Quaternion.LookRotation(targetDir);
-            Quaternion playerRot = Quaternion.Slerp(transform.rotation, targetRot, playerDatas.rotationSpeed * Time.deltaTime);
+            Vector3 targetDir = Vector3.zero;
+            targetDir = Camera.main.transform.forward * GameManager.Instance.moveInput.y;
+            targetDir = targetDir + Camera.main.transform.right * GameManager.Instance.moveInput.x;
+            targetDir.Normalize();
+            targetDir.y = 0;
 
-            transform.rotation = playerRot;
+            if (targetDir != Vector3.zero)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(targetDir);
+                Quaternion playerRot = Quaternion.Slerp(transform.rotation, targetRot, playerDatas.rotationSpeed * Time.deltaTime);
+
+                transform.rotation = playerRot;
+            }
+        }
+        else
+        {
+            LookAt(GameManager.Instance.GetWorldPosFormMouse());
         }
     }
 
@@ -345,27 +358,50 @@ public class PlayerManager : MonoBehaviour, IDamageable
         }
     }
 
+    void Reload()
+    {
+        if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlotPrefab) &&
+            itemSlotPrefab.curSlot.item is GunWeaponItemSO gun && itemSlotPrefab.curSlot.curMag <= 0 &&
+            GameManager.Instance.playerInventory.HasItem(gun.ammoType, out int ammoIndex))
+        {
+            if (reloadTime > 0)
+            {
+                reloadTime -= Time.deltaTime;
+                if (reloadTime <= 0)
+                {
+                    ItemSlotPrefab slotPrefab = GameManager.Instance.curHandSlot.transform.GetChild(0).GetComponent<ItemSlotPrefab>();
+                    slotPrefab.curSlot.curMag = gun.maxMagazine;
+                    reloadTime = gun.reloadTime;
+                }
+            }
+        }
+
+    }
+
     public void Attack()
     {
-        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
-
-        if (IsState(PlayerState.Draging))
+        if (isAttack)
         {
-            curDragObject.EndDrag();
-            return;
-        }
+            if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
 
-        if (IsState(PlayerState.ShowUI)) return;
+            if (IsState(PlayerState.Draging))
+            {
+                curDragObject.EndDrag();
+                return;
+            }
 
-        if (IsState(PlayerState.Action))
-        {
-            UIManager.Instance.HideActionDuration();
-            SwitchState(PlayerState.EndAnyAction);
-        }
+            if (IsState(PlayerState.ShowUI)) return;
 
-        if (curAttackDelay <= 0)
-        {
-            TryAttack();
+            if (IsState(PlayerState.Action))
+            {
+                UIManager.Instance.HideActionDuration();
+                SwitchState(PlayerState.EndAnyAction);
+            }
+
+            if (curAttackDelay <= 0)
+            {
+                TryAttack();
+            }
         }
 
     }
@@ -378,31 +414,35 @@ public class PlayerManager : MonoBehaviour, IDamageable
             {
                 if (itemSlotPrefab.curSlot.item is GunWeaponItemSO gun)
                 {
-                    curAttackDelay = gun.attackDelay;
-                    GunAttack(gun);
+                    if (itemSlotPrefab.curSlot.curMag > 0)
+                    {
+                        GunAttack(gun);
+                        itemSlotPrefab.curSlot.curMag--;
+                        curAttackDelay = gun.attackDelay;
+                    }
                 }
                 else if (itemSlotPrefab.curSlot.item is ThrowingWeaponItemSO throwing)
                 {
-                    curAttackDelay = throwing.attackDelay;
                     ThrowingAttack(throwing);
+                    curAttackDelay = throwing.attackDelay;
                 }
                 else
                 {
-                    curAttackDelay = itemSlotPrefab.curSlot.item.attackDelay;
                     MeleeAttack();
+                    curAttackDelay = itemSlotPrefab.curSlot.item.attackDelay;
                 }
             }
             else
             {
                 isAim = false;
-                curAttackDelay = playerDatas.attackDelay;
                 MeleeAttack();
+                curAttackDelay = playerDatas.attackDelay;
             }
         }
         else
         {
-            curAttackDelay = playerDatas.attackDelay;
             MeleeAttack();
+            curAttackDelay = playerDatas.attackDelay;
         }
     }
 
@@ -433,11 +473,16 @@ public class PlayerManager : MonoBehaviour, IDamageable
             LookAt(mousePos);
             StartCoroutine(AddForce(mouseDir, playerDatas.attackMoveForce, playerDatas.attackMoveDuration));
         }
+        isAttack = false;
     }
 
     void GunAttack(GunWeaponItemSO gun)
     {
+        GameObject bulletObj = Instantiate(gun.bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        Bullet bullet = bulletObj.GetComponent<Bullet>();
+        bullet.Setup(GameManager.Instance.GetDirToMouse(transform.position), gun.bulletSpeed, gun.bulletTime);
 
+        if (gun.FireType == FireType.Single) isAttack = false;
     }
 
     void ThrowingAttack(ThrowingWeaponItemSO throwing)
@@ -487,6 +532,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
             else if (itemSlotPrefab.curSlot.item is RangeWeaponItemSO rangeWeapon)
             {
                 isAim = !isAim;
+                Debug.Log("Toggle Aim" + isAim);
             }
         }
 
