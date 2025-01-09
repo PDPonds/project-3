@@ -16,6 +16,7 @@ MonoBehaviour:
   runSpeed: 7
   injurySpeed: 3
   dragingSpeed: 3
+  aimSpeed: 3
   rotationSpeed: 20
   maxHP: 10
   maxHungry: 10

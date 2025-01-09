@@ -7,6 +7,7 @@ public class PlayerDatas : ScriptableObject
     public float runSpeed;
     public float injurySpeed;
     public float dragingSpeed;
+    public float aimSpeed;
 
     [Header("===== Rotation =====")]
     public float rotationSpeed;

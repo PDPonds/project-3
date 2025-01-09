@@ -92,7 +92,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (!IsPhase(GamePhase.DuringGame)) return;
 
-        if (curPlayer.isAim) curPlayer.isAim = false;
+        if (curPlayer.IsState(PlayerState.Aim)) curPlayer.SwitchState(PlayerState.EndAnyAction);
 
         if (curPlayer.IsState(PlayerState.Draging))
         {

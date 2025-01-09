@@ -140,6 +140,9 @@ public class UIManager : Singleton<UIManager>
     {
         if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
 
+        if (GameManager.Instance.curPlayer.IsState(PlayerState.Aim)) GameManager.Instance.curPlayer.SwitchState(PlayerState.EndAnyAction);
+
+
         GameObject interactiveObj = GameManager.Instance.curInteractiveObj;
         if (interactiveObj == null) return;
 

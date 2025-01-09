@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum PlayerState
 {
-    Normal, Injury, ShowUI, EndAnyAction, Draging, Action
+    Normal, Injury, ShowUI, EndAnyAction, Draging, Action, Aim
 }
 
 public class PlayerManager : MonoBehaviour, IDamageable
@@ -33,7 +33,6 @@ public class PlayerManager : MonoBehaviour, IDamageable
     [HideInInspector] public bool isAttack;
     [SerializeField] Transform bulletSpawnPoint;
     float curAttackDelay;
-    [HideInInspector] public bool isAim;
     bool isAddForceState;
     [HideInInspector] public float reloadTime;
 
@@ -86,7 +85,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
     {
         if (IsState(PlayerState.Draging) || IsState(PlayerState.Action) || IsState(PlayerState.ShowUI)) return;
 
-        if (!isAim)
+        if (!IsState(PlayerState.Aim))
         {
             Vector3 targetDir = Vector3.zero;
             targetDir = Camera.main.transform.forward * GameManager.Instance.moveInput.y;
@@ -254,6 +253,11 @@ public class PlayerManager : MonoBehaviour, IDamageable
                 }
 
                 break;
+            case PlayerState.Aim:
+
+                curSpeed = playerDatas.aimSpeed;
+
+                break;
         }
     }
 
@@ -408,7 +412,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     void TryAttack()
     {
-        if (isAim)
+        if (IsState(PlayerState.Aim))
         {
             if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlotPrefab))
             {
@@ -428,13 +432,14 @@ public class PlayerManager : MonoBehaviour, IDamageable
                 }
                 else
                 {
+                    SwitchState(PlayerState.EndAnyAction);
                     MeleeAttack();
                     curAttackDelay = itemSlotPrefab.curSlot.item.attackDelay;
                 }
             }
             else
             {
-                isAim = false;
+                SwitchState(PlayerState.EndAnyAction);
                 MeleeAttack();
                 curAttackDelay = playerDatas.attackDelay;
             }
@@ -531,8 +536,11 @@ public class PlayerManager : MonoBehaviour, IDamageable
             }
             else if (itemSlotPrefab.curSlot.item is RangeWeaponItemSO rangeWeapon)
             {
-                isAim = !isAim;
-                Debug.Log("Toggle Aim" + isAim);
+                if (IsState(PlayerState.Aim)) SwitchState(PlayerState.EndAnyAction);
+                else
+                {
+                    SwitchState(PlayerState.Aim);
+                }
             }
         }
 
