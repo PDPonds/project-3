@@ -373,8 +373,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
                 reloadTime -= Time.deltaTime;
                 if (reloadTime <= 0)
                 {
-                    ItemSlotPrefab slotPrefab = GameManager.Instance.curHandSlot.transform.GetChild(0).GetComponent<ItemSlotPrefab>();
-                    slotPrefab.curSlot.curMag = gun.maxMagazine;
+                    itemSlotPrefab.curSlot.curMag = gun.maxMagazine;
                     reloadTime = gun.reloadTime;
                 }
             }
@@ -484,7 +483,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
     void GunAttack(GunWeaponItemSO gun)
     {
         GameObject bulletObj = Instantiate(gun.bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
-        Bullet bullet = bulletObj.GetComponent<Bullet>();
+        BulletObject bullet = bulletObj.GetComponent<BulletObject>();
         bullet.Setup(GameManager.Instance.GetDirToMouse(transform.position), gun.bulletSpeed, gun.bulletTime);
 
         if (gun.FireType == FireType.Single) isAttack = false;

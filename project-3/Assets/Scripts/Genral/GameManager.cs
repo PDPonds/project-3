@@ -26,6 +26,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] LayerMask mousePosMask;
     [HideInInspector] public Vector2 mousePos;
     [HideInInspector] public Vector2 moveInput;
+    [Header("===== Select Map =====")]
+    [HideInInspector] public MapTypeSO curMapSelect;
 
     private void Start()
     {
@@ -156,6 +158,7 @@ public class GameManager : Singleton<GameManager>
                 UIManager.Instance.HideInteractiveChoice();
                 UIManager.Instance.HideInteractiveKey();
                 SwitchPhase(GamePhase.SelectMap);
+                curMapSelect = null;
                 break;
         }
     }
@@ -178,6 +181,15 @@ public class GameManager : Singleton<GameManager>
     public bool IsPhase(GamePhase phase)
     {
         return this.phase == phase;
+    }
+
+    #endregion
+
+    #region Select Map
+
+    public void SelectMap(MapTypeSO map)
+    {
+        curMapSelect = map;
     }
 
     #endregion

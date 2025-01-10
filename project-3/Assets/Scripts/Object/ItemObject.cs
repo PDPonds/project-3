@@ -24,7 +24,7 @@ public class ItemObject : MonoBehaviour, IActionObject
     {
         if (slot.item != null)
         {
-            GameObject visual = Instantiate(slot.item.itemPrefab, transform);
+            GameObject visual = Instantiate(slot.item.itemOnHandPrefab, transform);
         }
     }
 

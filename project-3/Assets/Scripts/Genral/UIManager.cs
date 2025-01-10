@@ -47,6 +47,9 @@ public class UIManager : Singleton<UIManager>
     [Header("===== Select Map =====")]
     [SerializeField] Transform selectMapPanel;
     [SerializeField] Button driveButton;
+    [SerializeField] Transform previousMapAndSelectMapParent;
+    [SerializeField] GameObject previousMapPrefab;
+    [SerializeField] GameObject selectMapPrefab;
 
     private void Awake()
     {
@@ -338,6 +341,7 @@ public class UIManager : Singleton<UIManager>
     public void ShowSelectMap()
     {
         selectMapPanel.gameObject.SetActive(true);
+        UpdateSelectMapInfo();
     }
 
     public void HideSelectMap()
@@ -345,9 +349,48 @@ public class UIManager : Singleton<UIManager>
         selectMapPanel.gameObject.SetActive(false);
     }
 
+    void UpdateSelectMapInfo()
+    {
+        ClearParent(previousMapAndSelectMapParent);
+        InitSelectMap();
+        InitPreviousMap();
+    }
+
+    void InitSelectMap()
+    {
+        List<MapTypeSO> maps = MapGenerator.Instance.RandomMap(2);
+        if (maps.Count > 0)
+        {
+            MapTypeSO map_1 = maps[0];
+            MapTypeSO map_2 = maps[1];
+
+            GameObject obj = Instantiate(selectMapPrefab, previousMapAndSelectMapParent);
+            SelectMapPrefab select = obj.GetComponent<SelectMapPrefab>();
+            select.Setup(map_1, map_2);
+        }
+    }
+
+    void InitPreviousMap()
+    {
+        if (MapGenerator.Instance.previousMap.Count > 0)
+        {
+            for (int i = 0; i < MapGenerator.Instance.previousMap.Count; i++)
+            {
+                MapTypeSO map = MapGenerator.Instance.previousMap[i];
+                GameObject obj = Instantiate(previousMapPrefab, previousMapAndSelectMapParent);
+                PreviousMapPrefab previousMap = obj.GetComponent<PreviousMapPrefab>();
+                previousMap.Setup(map);
+            }
+        }
+    }
+
     void DriveButton()
     {
-        GameManager.Instance.SwitchPhase(GamePhase.GameStart);
+        if (GameManager.Instance.curMapSelect != null)
+        {
+            MapGenerator.Instance.previousMap.Insert(0, GameManager.Instance.curMapSelect);
+            GameManager.Instance.SwitchPhase(GamePhase.GameStart);
+        }
     }
 
     #endregion

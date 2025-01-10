@@ -15,7 +15,7 @@ public class ItemSO : ScriptableObject
     [Header("==== Cost =====")]
     public Vector2Int Min_Max_ItemCost;
     [Header("==== Prefab =====")]
-    public GameObject itemPrefab;
+    public GameObject itemOnHandPrefab;
     [Header("===== Stackable =====")]
     public bool itemStackable;
     [Header("==== Attack =====")]
