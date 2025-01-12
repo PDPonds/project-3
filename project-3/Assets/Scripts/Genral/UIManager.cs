@@ -12,9 +12,17 @@ public class UIManager : Singleton<UIManager>
 {
     public Transform canvasTransform;
     [Header("===== PlayerStatus =====")]
+    [Header("- Status")]
     [SerializeField] Transform playerStatusPanel;
+    [SerializeField] Transform hpStatutParent;
+    [SerializeField] Transform hungryStatutParent;
+    [SerializeField] Transform thirstyStatutParent;
     [SerializeField] Transform playerStatus_HandSlot_1_Border;
     [SerializeField] Transform playerStatus_HandSlot_2_Border;
+    [Header("- Day")]
+    [SerializeField] TextMeshProUGUI dayText;
+    [Header("- Coin")]
+    [SerializeField] TextMeshProUGUI coinText;
     [Header("===== Interactive =====")]
     [Header("- Key")]
     [SerializeField] GameObject interactiveKey;
@@ -23,6 +31,8 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Transform interactiveChoiceParent;
     [SerializeField] GameObject interactiveChoicePrefab;
     [SerializeField] Vector3 interactiveChoiceParentOffset;
+    [Header("- Vehicle Status")]
+    [SerializeField] GameObject vehicleStatusPrefab;
     [Header("===== Inventory =====")]
     [SerializeField] GameObject inventoryPanel;
     [Header("- Inventory")]
@@ -46,10 +56,11 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Image actionDurationFill;
     [Header("===== Select Map =====")]
     [SerializeField] Transform selectMapPanel;
-    [SerializeField] Button driveButton;
+    public Button driveButton;
     [SerializeField] Transform previousMapAndSelectMapParent;
     [SerializeField] GameObject previousMapPrefab;
     [SerializeField] GameObject selectMapPrefab;
+    [SerializeField] GameObject selectMapLinePrefab;
 
     private void Awake()
     {
@@ -104,6 +115,11 @@ public class UIManager : Singleton<UIManager>
     {
         if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
 
+        PlayerDatas playerDatas = GameManager.Instance.curPlayer.playerDatas;
+        UpdateStatusPrefab(playerDatas.hpColor, playerDatas.maxHP, playerDatas.curHP, hpStatutParent);
+        UpdateStatusPrefab(playerDatas.hungryColor, playerDatas.maxHungry, playerDatas.curHungry, hungryStatutParent);
+        UpdateStatusPrefab(playerDatas.thirstyColor, playerDatas.maxThirsty, playerDatas.curThirsty, thirstyStatutParent);
+
         InitItemSlotToParent(GameManager.Instance.curPlayer.handSlot_1, playerStatus_HandSlot_1_Border);
         InitItemSlotToParent(GameManager.Instance.curPlayer.handSlot_2, playerStatus_HandSlot_2_Border);
         Image img_1 = playerStatus_HandSlot_1_Border.GetComponent<Image>();
@@ -121,6 +137,37 @@ public class UIManager : Singleton<UIManager>
                 img_2.color = new Color(1, 1, 1, 1);
             }
         }
+    }
+
+    void UpdateStatusPrefab(Color color, int max, int cur, Transform parent)
+    {
+        ClearParent(parent);
+
+        if (cur > 0)
+        {
+            for (int i = 0; i < cur; i++)
+            {
+                InitStatusPrefab(color, i.ToString(), parent);
+            }
+        }
+
+        int emptyCount = max - cur;
+        if (emptyCount > 0)
+        {
+            for (int i = 0; i < emptyCount; i++)
+            {
+                InitStatusPrefab(GameManager.Instance.curPlayer.playerDatas.emptyColor, i.ToString(), parent);
+            }
+        }
+    }
+
+    GameObject InitStatusPrefab(Color color, string name, Transform statusParent)
+    {
+        GameObject obj = new GameObject(name);
+        obj.transform.SetParent(statusParent);
+        Image img = obj.AddComponent<Image>();
+        img.color = color;
+        return obj;
     }
 
     #endregion
@@ -157,22 +204,13 @@ public class UIManager : Singleton<UIManager>
         interactiveChoiceParent.transform.position = scenePoint + interactiveChoiceParentOffset;
 
         ClearParent(interactiveChoiceParent);
-        if (interactiveObj.TryGetComponent<IActionObject>(out IActionObject actionObject))
-        {
-            GameObject actionChoice = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
-            InteractiveChoicePrefab choice = actionChoice.GetComponent<InteractiveChoicePrefab>();
-            choice.Setup(actionObject, () => { return true; });
-        }
-
-        if (interactiveObj.TryGetComponent<IDragable>(out IDragable dragable))
-        {
-            GameObject actionChoice = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
-            InteractiveChoicePrefab choice = actionChoice.GetComponent<InteractiveChoicePrefab>();
-            choice.Setup(dragable, () => { return true; });
-        }
-
         if (interactiveObj.TryGetComponent<VehicleObject>(out VehicleObject vehicleObject))
         {
+            GameObject vehicleStatusObj = Instantiate(vehicleStatusPrefab, interactiveChoiceParent);
+            VehicleStatusPrefab vSP = vehicleStatusObj.GetComponent<VehicleStatusPrefab>();
+            vehicleObject.curStatusInfo = vSP;
+            vSP.UpdateStatus(vehicleObject.maxGas, vehicleObject.curGas, vehicleObject.maxHP, vehicleObject.curHP);
+
             GameObject actionChoice_drive = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
             InteractiveChoicePrefab choice_drive = actionChoice_drive.GetComponent<InteractiveChoicePrefab>();
             choice_drive.Setup("Drive", vehicleObject.onDrive, () => { return true; });
@@ -208,6 +246,20 @@ public class UIManager : Singleton<UIManager>
 
                 return false;
             });
+        }
+
+        if (interactiveObj.TryGetComponent<IActionObject>(out IActionObject actionObject))
+        {
+            GameObject actionChoice = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
+            InteractiveChoicePrefab choice = actionChoice.GetComponent<InteractiveChoicePrefab>();
+            choice.Setup(actionObject, () => { return true; });
+        }
+
+        if (interactiveObj.TryGetComponent<IDragable>(out IDragable dragable))
+        {
+            GameObject actionChoice = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
+            InteractiveChoicePrefab choice = actionChoice.GetComponent<InteractiveChoicePrefab>();
+            choice.Setup(dragable, () => { return true; });
         }
 
     }
@@ -341,6 +393,7 @@ public class UIManager : Singleton<UIManager>
     public void ShowSelectMap()
     {
         selectMapPanel.gameObject.SetActive(true);
+        driveButton.interactable = false;
         UpdateSelectMapInfo();
     }
 
@@ -376,6 +429,7 @@ public class UIManager : Singleton<UIManager>
         {
             for (int i = 0; i < MapGenerator.Instance.previousMap.Count; i++)
             {
+                Instantiate(selectMapLinePrefab, previousMapAndSelectMapParent);
                 MapTypeSO map = MapGenerator.Instance.previousMap[i];
                 GameObject obj = Instantiate(previousMapPrefab, previousMapAndSelectMapParent);
                 PreviousMapPrefab previousMap = obj.GetComponent<PreviousMapPrefab>();
@@ -393,6 +447,21 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    #endregion
+
+    #region Day
+    public void UpdateDay()
+    {
+        dayText.text = $"Day {GameManager.Instance.curDay}";
+    }
+    #endregion
+
+    #region Coin
+    public void UpdateCoin()
+    {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+        coinText.text = GameManager.Instance.curPlayer.playerDatas.coin.ToString();
+    }
     #endregion
 
 }

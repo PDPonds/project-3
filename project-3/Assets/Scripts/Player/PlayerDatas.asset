@@ -19,8 +19,11 @@ MonoBehaviour:
   aimSpeed: 3
   rotationSpeed: 20
   maxHP: 10
+  curHP: 5
   maxHungry: 10
+  curHungry: 3
   maxThirsty: 10
+  curThirsty: 2
   interactiveRange: 0.75
   interactiveMask:
     serializedVersion: 2
@@ -33,3 +36,7 @@ MonoBehaviour:
     m_Bits: 128
   attackMoveForce: 0.1
   attackMoveDuration: 0.25
+  hpColor: {r: 0.7075472, g: 0.21026166, b: 0.22000036, a: 1}
+  hungryColor: {r: 0.8773585, g: 0.7014649, b: 0.25244746, a: 1}
+  thirstyColor: {r: 0.22530258, g: 0.6636419, b: 0.7830189, a: 1}
+  emptyColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}

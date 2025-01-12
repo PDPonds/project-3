@@ -10,9 +10,12 @@ public enum GamePhase
 public class GameManager : Singleton<GameManager>
 {
     GamePhase phase;
+
     [Header("===== Init On Game Start ======")]
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject cameraPrefab;
+    [Header("===== Day ======")]
+    public int curDay;
     [Header("===== Player =====")]
     public InventorySO playerInventory;
     [HideInInspector] public PlayerManager curPlayer;
@@ -189,6 +192,7 @@ public class GameManager : Singleton<GameManager>
 
     public void SelectMap(MapTypeSO map)
     {
+        UIManager.Instance.driveButton.interactable = true;
         curMapSelect = map;
     }
 

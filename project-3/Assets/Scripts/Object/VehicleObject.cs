@@ -24,11 +24,15 @@ public class VehicleObject : MonoBehaviour, IDamageable
         {
             curHP = maxHP;
         }
+        curStatusInfo?.UpdateStatus(maxGas, curGas, maxHP, curHP);
+
     }
 
     public void ResetHP()
     {
         curHP = maxHP;
+        curStatusInfo?.UpdateStatus(maxGas, curGas, maxHP, curHP);
+
     }
 
     public void TakeDamage(int dmg)
@@ -38,6 +42,8 @@ public class VehicleObject : MonoBehaviour, IDamageable
         {
             Death();
         }
+        curStatusInfo?.UpdateStatus(maxGas, curGas, maxHP, curHP);
+
     }
 
     #endregion
@@ -45,6 +51,8 @@ public class VehicleObject : MonoBehaviour, IDamageable
     public UnityAction onDrive;
     public UnityAction onFillGas;
     public UnityAction onRepair;
+
+    [HideInInspector] public VehicleStatusPrefab curStatusInfo;
 
     private void Start()
     {
@@ -73,6 +81,7 @@ public class VehicleObject : MonoBehaviour, IDamageable
     void FillGas()
     {
         Debug.Log("Fill Gas");
+        curStatusInfo?.UpdateStatus(maxGas, curGas, maxHP, curHP);
     }
 
     void StartRepair()
@@ -91,6 +100,7 @@ public class VehicleObject : MonoBehaviour, IDamageable
     void Repair()
     {
         Debug.Log("Repair");
+        curStatusInfo?.UpdateStatus(maxGas, curGas, maxHP, curHP);
     }
 
     #region Gas
@@ -102,6 +112,7 @@ public class VehicleObject : MonoBehaviour, IDamageable
         {
             curGas = 0;
         }
+        curStatusInfo?.UpdateStatus(maxGas, curGas, maxHP, curHP);
     }
 
     public void IncreaseGas(int amount)
@@ -111,6 +122,7 @@ public class VehicleObject : MonoBehaviour, IDamageable
         {
             curGas = maxGas;
         }
+        curStatusInfo?.UpdateStatus(maxGas, curGas, maxHP, curHP);
     }
 
 

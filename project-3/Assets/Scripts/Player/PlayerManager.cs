@@ -22,9 +22,6 @@ public class PlayerManager : MonoBehaviour, IDamageable
     public int maxHP { get; set; }
     public int curHP { get; set; }
 
-    [SerializeField] int curHungry;
-    [SerializeField] int curThirsty;
-
     [Header("===== HandSlot =====")]
     public ItemSlot handSlot_1 = new ItemSlot();
     public ItemSlot handSlot_2 = new ItemSlot();
@@ -47,6 +44,8 @@ public class PlayerManager : MonoBehaviour, IDamageable
     public void Setup()
     {
         rb = GetComponent<Rigidbody>();
+        maxHP = playerDatas.maxHP;
+        curHP = playerDatas.curHP;
         SwitchState(PlayerState.Normal);
     }
 
@@ -273,6 +272,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
     public void ResetHP()
     {
         curHP = maxHP;
+        playerDatas.curHP = curHP;
     }
 
     public void TakeDamage(int dmg)
@@ -282,6 +282,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
         {
             Death();
         }
+        playerDatas.curHP = curHP;
     }
 
     public void Heal(int amount)
@@ -291,6 +292,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
         {
             ResetHP();
         }
+        playerDatas.curHP = curHP;
     }
 
     public void Death()
@@ -304,22 +306,22 @@ public class PlayerManager : MonoBehaviour, IDamageable
     #region Hungry And Thirsty
     public void ResetHungry()
     {
-        curHungry = playerDatas.maxHungry;
+        playerDatas.curHungry = playerDatas.maxHungry;
     }
 
     public void DecreaseHungry(int amount)
     {
-        curHungry -= amount;
-        if (curHungry <= 0)
+        playerDatas.curHungry -= amount;
+        if (playerDatas.curHungry <= 0)
         {
-            curHungry = 0;
+            playerDatas.curHungry = 0;
         }
     }
 
     public void IncreaseHungry(int amount)
     {
-        curHungry += amount;
-        if (curHungry >= playerDatas.maxHungry)
+        playerDatas.curHungry += amount;
+        if (playerDatas.curHungry >= playerDatas.maxHungry)
         {
             ResetHungry();
         }
@@ -327,22 +329,22 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     public void ResetThirsty()
     {
-        curThirsty = playerDatas.maxThirsty;
+        playerDatas.curThirsty = playerDatas.maxThirsty;
     }
 
     public void DecreaseThirsty(int amount)
     {
-        curThirsty -= amount;
-        if (curThirsty <= 0)
+        playerDatas.curThirsty -= amount;
+        if (playerDatas.curThirsty <= 0)
         {
-            curThirsty = 0;
+            playerDatas.curThirsty = 0;
         }
     }
 
     public void IncreaseThirsty(int amount)
     {
-        curThirsty += amount;
-        if (curThirsty >= playerDatas.maxThirsty)
+        playerDatas.curThirsty += amount;
+        if (playerDatas.curThirsty >= playerDatas.maxThirsty)
         {
             ResetThirsty();
         }

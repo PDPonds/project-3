@@ -12,14 +12,20 @@ public class PlayerDatas : ScriptableObject
     [Header("===== Rotation =====")]
     public float rotationSpeed;
 
+    [Header("===== Coin =====")]
+    public int coin;
+
     [Header("===== HP =====")]
     public int maxHP;
+    public int curHP;
 
     [Header("===== Hungry =====")]
     public int maxHungry;
+    public int curHungry;
 
     [Header("===== Thirsty =====")]
     public int maxThirsty;
+    public int curThirsty;
 
     [Header("===== Interactive =====")]
     public float interactiveRange;
@@ -33,5 +39,11 @@ public class PlayerDatas : ScriptableObject
     public LayerMask meleeAttackMask;
     public float attackMoveForce;
     public float attackMoveDuration;
+
+    [Header("===== Player Status =====")]
+    public Color hpColor;
+    public Color hungryColor;
+    public Color thirstyColor;
+    public Color emptyColor;
 
 }
