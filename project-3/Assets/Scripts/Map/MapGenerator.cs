@@ -1,11 +1,15 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MapGenerator : Singleton<MapGenerator>
 {
+    GameObject curMap;
+
     public MapTypeSO[] allMapType;
     [HideInInspector] public List<MapTypeSO> previousMap = new List<MapTypeSO>();
+
+    [Header("===== Map Prefab =====")]
+    [SerializeField] GameObject mapPrefab;
 
     public List<MapTypeSO> RandomMap(int count)
     {
@@ -25,6 +29,17 @@ public class MapGenerator : Singleton<MapGenerator>
         }
 
         return maps;
+    }
+
+
+    public void GenerateMap(MapTypeSO mapTypeSO)
+    {
+        if (curMap != null) Destroy(curMap);
+
+        GameObject mapObj = Instantiate(mapPrefab, Vector3.zero, Quaternion.identity);
+        Map map = mapObj.GetComponent<Map>();
+        map.Setup(mapTypeSO);
+        curMap = mapObj;
     }
 
 }

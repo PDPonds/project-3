@@ -442,6 +442,7 @@ public class UIManager : Singleton<UIManager>
     {
         if (GameManager.Instance.curMapSelect != null)
         {
+            MapGenerator.Instance.GenerateMap(GameManager.Instance.curMapSelect);
             MapGenerator.Instance.previousMap.Insert(0, GameManager.Instance.curMapSelect);
             GameManager.Instance.SwitchPhase(GamePhase.GameStart);
         }
