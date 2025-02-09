@@ -13,19 +13,40 @@ public class MapTypeSO : ScriptableObject
     public string mapName;
     public Sprite mapIcon;
     public MapType mapType;
-    public int maxMapValue;
+    [Range(1, 6)] public int maxMapValue;
     [Header("===== Tile Type =====")]
-    public List<Tile> allTileCanGeneratePrefab = new List<Tile>();
+    public List<GameObject> AllBuildingTileCanInit = new List<GameObject>();
+    public List<GameObject> AllNoneBuildingTileCanInit = new List<GameObject>();
 
-    public List<GameObject> GetAllTilePrefab()
+    public List<Tile> GetAllTilePrefab(int buildingCount, int noneBuildingCount)
     {
-        List<GameObject> tilePrefabs = new List<GameObject>();
-        int curTileValue = 0;
-        while (curTileValue < maxMapValue)
+        List<Tile> tilePrefabs = new List<Tile>();
+        if (buildingCount > 0)
         {
-            int tileIndex = UnityEngine.Random.Range(0, allTileCanGeneratePrefab.Count);
-            tilePrefabs.Add(allTileCanGeneratePrefab[tileIndex].tilePrefab);
-            curTileValue += allTileCanGeneratePrefab[tileIndex].tileValue;
+            int count = UnityEngine.Random.Range(1, buildingCount);
+            for (int i = 0; i < count; i++)
+            {
+                int rand = UnityEngine.Random.Range(0, AllBuildingTileCanInit.Count);
+                GameObject go = AllBuildingTileCanInit[rand];
+                Tile tile = new Tile();
+                tile.TilePrefab = go;
+                tile.isBuilding = true;
+                tilePrefabs.Add(tile);
+            }
+        }
+
+        if (noneBuildingCount > 0)
+        {
+            int count = UnityEngine.Random.Range(1, noneBuildingCount);
+            for (int i = 0; i < count; i++)
+            {
+                int rand = UnityEngine.Random.Range(0, AllNoneBuildingTileCanInit.Count);
+                GameObject go = AllNoneBuildingTileCanInit[rand];
+                Tile tile = new Tile();
+                tile.TilePrefab = go;
+                tile.isBuilding = false;
+                tilePrefabs.Add(tile);
+            }
         }
 
         return tilePrefabs;
@@ -36,6 +57,6 @@ public class MapTypeSO : ScriptableObject
 [Serializable]
 public class Tile
 {
-    public GameObject tilePrefab;
-    public int tileValue;
+    public GameObject TilePrefab;
+    public bool isBuilding;
 }
