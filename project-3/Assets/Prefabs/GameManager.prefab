@@ -272,7 +272,7 @@ MonoBehaviour:
   curStorageObj: {fileID: 0}
   mousePosMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mousePos: {x: 0, y: 0}
   moveInput: {x: 0, y: 0}
   curMapSelect: {fileID: 0}
@@ -335,6 +335,8 @@ MonoBehaviour:
   previousMapPrefab: {fileID: 1312061831159743216, guid: 44fd416b22985914ebaff470ae29664f, type: 3}
   selectMapPrefab: {fileID: 479139424432722556, guid: f93df2d5c183dd14e80562ba3378807e, type: 3}
   selectMapLinePrefab: {fileID: 4110075685680036299, guid: 3211c427c63222d43a8e9638ac79fa86, type: 3}
+  throwingArea: {fileID: 0}
+  throwingRange: {fileID: 0}
 --- !u!114 &3055416418816347705
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -185,19 +185,15 @@ public class Map : MonoBehaviour
     {
         int b = GetBuildingEmptyCell().Count;
         int n = GetNoneBuildingEmptyCell().Count;
-        Debug.Log($"{b} , {n}");
         List<Tile> allTile = curMapType.GetAllTilePrefab(b, n);
         if (allTile.Count > 0)
         {
-            int bDebug = 0;
-            int nDebug = 0;
             for (int x = 0; x < allTile.Count; x++)
             {
                 bool isBuilding = allTile[x].isBuilding;
                 GameObject prefab = allTile[x].TilePrefab;
                 if (isBuilding)
                 {
-                    bDebug++;
                     List<Cell> emptyBuildingCell = GetBuildingEmptyCell();
                     int rand = Random.Range(0, emptyBuildingCell.Count);
                     Cell cell = emptyBuildingCell[rand];
@@ -208,7 +204,6 @@ public class Map : MonoBehaviour
                 }
                 else
                 {
-                    nDebug++;
                     List<Cell> emptyNoneBuildingCell = GetNoneBuildingEmptyCell();
                     int rand = Random.Range(0, emptyNoneBuildingCell.Count);
                     Cell cell = emptyNoneBuildingCell[rand];
@@ -218,7 +213,6 @@ public class Map : MonoBehaviour
 
                 }
             }
-            Debug.Log($"b : {bDebug} , n : {nDebug}");
         }
     }
 }

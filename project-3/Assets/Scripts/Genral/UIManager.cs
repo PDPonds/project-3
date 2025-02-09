@@ -61,6 +61,12 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] GameObject previousMapPrefab;
     [SerializeField] GameObject selectMapPrefab;
     [SerializeField] GameObject selectMapLinePrefab;
+    [Header("===== Throwing Item =====")]
+    [SerializeField] Transform throwingArea;
+    MeshRenderer throwingAreaMeshRen;
+    [SerializeField] Material throwingAbleMat;
+    [SerializeField] Material unThrowingAbleMat;
+    [SerializeField] Transform throwingRange;
 
     private void Awake()
     {
@@ -84,6 +90,8 @@ public class UIManager : Singleton<UIManager>
             {
                 UpdateActionDurationFill(GameManager.Instance.curPlayer.actionTime, GameManager.Instance.curPlayer.maxActionTime);
             }
+
+            UpdateThrowingAreaPosition();
         }
     }
 
@@ -387,6 +395,47 @@ public class UIManager : Singleton<UIManager>
         float p = c / m;
         actionDurationFill.fillAmount = p;
     }
+    #endregion
+
+    #region Throwing Item
+    public void ShowThrowingVisual(float area, float range)
+    {
+        throwingArea.gameObject.SetActive(true);
+        throwingRange.gameObject.SetActive(true);
+        throwingArea.localScale = new Vector3(area * 2, area * 2, 1);
+        throwingRange.localScale = new Vector3(range * 2, range * 2, 1);
+        if (throwingAreaMeshRen == null)
+        {
+            throwingAreaMeshRen = throwingArea.GetComponent<MeshRenderer>();
+        }
+    }
+
+    void UpdateThrowingAreaPosition()
+    {
+        if (throwingArea.gameObject.activeSelf)
+        {
+            float dis = Vector3.Distance(throwingArea.transform.position, GameManager.Instance.curPlayer.transform.position);
+            float attackRange = GameManager.Instance.curPlayer.throwingRange;
+            Vector3 mousePos = GameManager.Instance.GetWorldPosFormMouse();
+            Vector3 areaPos = mousePos + new Vector3(0, 0.02f, 0);
+            throwingArea.transform.position = areaPos;
+            if (dis > attackRange) throwingAreaMeshRen.material = unThrowingAbleMat;
+            else throwingAreaMeshRen.material = throwingAbleMat;
+        }
+
+        if (throwingRange.gameObject.activeSelf)
+        {
+            Vector3 rangePos = GameManager.Instance.curPlayer.transform.position + new Vector3(0, 0.01f, 0);
+            throwingRange.transform.position = rangePos;
+        }
+    }
+
+    public void HideThrowingVisual()
+    {
+        throwingArea.gameObject.SetActive(false);
+        throwingRange.gameObject.SetActive(false);
+    }
+
     #endregion
 
     #region SelectMap

@@ -32,6 +32,8 @@ public class PlayerManager : MonoBehaviour, IDamageable
     float curAttackDelay;
     bool isAddForceState;
     [HideInInspector] public float reloadTime;
+    [HideInInspector] public float throwingArea;
+    [HideInInspector] public float throwingRange;
 
     [Header("===== Drag =====")]
     [HideInInspector] public IDragable curDragObject;
@@ -201,7 +203,19 @@ public class PlayerManager : MonoBehaviour, IDamageable
         playerState = state;
         switch (playerState)
         {
+            case PlayerState.Aim:
+                if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlotPrefab))
+                {
+                    if (itemSlotPrefab.curSlot.item is ThrowingWeaponItemSO throwing)
+                    {
+                        UIManager.Instance.ShowThrowingVisual(throwing.attackArea, throwing.attackRange);
+                        throwingArea = throwing.attackArea;
+                        throwingRange = throwing.attackRange;
+                    }
+                }
+                break;
             case PlayerState.EndAnyAction:
+                UIManager.Instance.HideThrowingVisual();
                 SwitchState(PlayerState.Normal);
                 break;
         }
@@ -488,12 +502,15 @@ public class PlayerManager : MonoBehaviour, IDamageable
         BulletObject bullet = bulletObj.GetComponent<BulletObject>();
         bullet.Setup(GameManager.Instance.GetDirToMouse(transform.position), gun.bulletSpeed, gun.bulletTime);
 
+        //Remove Bullet
+
         if (gun.FireType == FireType.Single) isAttack = false;
     }
 
     void ThrowingAttack(ThrowingWeaponItemSO throwing)
     {
 
+        //Remove Throwing Item
     }
 
     #endregion
@@ -537,7 +554,10 @@ public class PlayerManager : MonoBehaviour, IDamageable
             }
             else if (itemSlotPrefab.curSlot.item is RangeWeaponItemSO rangeWeapon)
             {
-                if (IsState(PlayerState.Aim)) SwitchState(PlayerState.EndAnyAction);
+                if (IsState(PlayerState.Aim))
+                {
+                    SwitchState(PlayerState.EndAnyAction);
+                }
                 else
                 {
                     SwitchState(PlayerState.Aim);

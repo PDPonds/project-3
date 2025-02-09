@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 718281537363648242}
   - component: {fileID: 998616137486883036}
   - component: {fileID: 4209244942750325704}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8705163531432972565}
   - component: {fileID: 8252485615485412183}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FloorTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
