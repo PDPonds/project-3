@@ -46,8 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curMapType: {fileID: 0}
   mapSize: 3
-  cellSize: 20
-  origin: {x: -30, y: 0, z: -30}
+  cellSize: 5
+  origin: {x: -7.5, y: 0, z: -7.5}
   AllMapFloors:
   - {fileID: 5922316216825315398, guid: ed8738e06076b6c478ad570a76a6e2b5, type: 3}
   AllRoads:

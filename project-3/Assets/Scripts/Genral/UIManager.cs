@@ -414,13 +414,12 @@ public class UIManager : Singleton<UIManager>
     {
         if (throwingArea.gameObject.activeSelf)
         {
-            float dis = Vector3.Distance(throwingArea.transform.position, GameManager.Instance.curPlayer.transform.position);
-            float attackRange = GameManager.Instance.curPlayer.throwingRange;
+
             Vector3 mousePos = GameManager.Instance.GetWorldPosFormMouse();
             Vector3 areaPos = mousePos + new Vector3(0, 0.02f, 0);
             throwingArea.transform.position = areaPos;
-            if (dis > attackRange) throwingAreaMeshRen.material = unThrowingAbleMat;
-            else throwingAreaMeshRen.material = throwingAbleMat;
+            if (ThrowingPointInRange()) throwingAreaMeshRen.material = throwingAbleMat;
+            else throwingAreaMeshRen.material = unThrowingAbleMat;
         }
 
         if (throwingRange.gameObject.activeSelf)
@@ -434,6 +433,13 @@ public class UIManager : Singleton<UIManager>
     {
         throwingArea.gameObject.SetActive(false);
         throwingRange.gameObject.SetActive(false);
+    }
+
+    public bool ThrowingPointInRange()
+    {
+        float dis = Vector3.Distance(throwingArea.transform.position, GameManager.Instance.curPlayer.transform.position);
+        float attackRange = GameManager.Instance.curPlayer.throwingRange;
+        return (dis < attackRange);
     }
 
     #endregion

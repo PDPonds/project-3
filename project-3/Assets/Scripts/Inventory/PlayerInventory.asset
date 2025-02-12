@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c500edeeff0ee3a4e8ca8c6cf9dca2e1, type: 3}
   m_Name: PlayerInventory
   m_EditorClassIdentifier: 
-  slots: []
+  slots:
+  - item: {fileID: 11400000, guid: 39a02035b3c4f714c8f638888aae884a, type: 2}
+    count: 1
+    maxValue: 1
+    curValue: 1
+    curMag: 0
   maxWeight: 0

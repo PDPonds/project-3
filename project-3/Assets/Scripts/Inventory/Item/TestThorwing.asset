@@ -20,7 +20,7 @@ MonoBehaviour:
   itemOnHandPrefab: {fileID: 0}
   itemStackable: 1
   damage: 2
-  attackDelay: 2
+  attackDelay: 0.5
   itemType: 0
   weaponType: 1
   bulletPrefab: {fileID: 0}

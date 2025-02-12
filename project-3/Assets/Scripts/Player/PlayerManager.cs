@@ -509,8 +509,11 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     void ThrowingAttack(ThrowingWeaponItemSO throwing)
     {
-
-        //Remove Throwing Item
+        if (UIManager.Instance.ThrowingPointInRange())
+        {
+            Debug.Log("Throw");
+            //Remove Throwing Item
+        }
     }
 
     #endregion
