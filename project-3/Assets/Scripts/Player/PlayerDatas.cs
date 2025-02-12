@@ -46,4 +46,7 @@ public class PlayerDatas : ScriptableObject
     public Color thirstyColor;
     public Color emptyColor;
 
+    [Header("===== Lock Pick =====")]
+    public float lockPickDelay;
+
 }

@@ -6,18 +6,44 @@ public class StorageObject : MonoBehaviour, IActionObject, ILockable
 {
     public List<ItemSlot> slots = new List<ItemSlot>();
 
+    [Header("===== Lock =====")]
+    public int MaxLockCount;
+    public int StartShowLockCount;
     public bool IsLocked { get; set; }
+    List<int> LockPos = new List<int>();
 
     private void Start()
     {
         IsLocked = true;
+        Setup();
+    }
+
+    public void Setup()
+    {
+        //Random Spawn Item
+
+        if (IsLocked)
+        {
+            for (int i = 1; i <= MaxLockCount; i++)
+            {
+                LockPos.Add(i);
+            }
+            LockPos = GameManager.Instance.ShuffleInt(LockPos);
+        }
     }
 
     #region Action
     public void Action()
     {
-        GameManager.Instance.curStorageObj = this;
-        UIManager.Instance.ToggleInventory(ShowInventoryType.Storage);
+        if (IsLocked)
+        {
+            UIManager.Instance.ShowLockPick(LockPos);
+        }
+        else
+        {
+            GameManager.Instance.curStorageObj = this;
+            UIManager.Instance.ToggleInventory(ShowInventoryType.Storage);
+        }
     }
 
     public string ActionName()

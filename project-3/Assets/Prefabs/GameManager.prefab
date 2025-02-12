@@ -275,6 +275,7 @@ MonoBehaviour:
     m_Bits: 256
   mousePos: {x: 0, y: 0}
   moveInput: {x: 0, y: 0}
+  arrowInput: {x: 0, y: 0}
   curMapSelect: {fileID: 0}
 --- !u!114 &2822165958753336625
 MonoBehaviour:
@@ -339,6 +340,7 @@ MonoBehaviour:
   throwingAbleMat: {fileID: 2100000, guid: 960cafcb11409914ba4786234c78c189, type: 2}
   unThrowingAbleMat: {fileID: 2100000, guid: a64ba2326cf14cb45a0fb1d97abb156e, type: 2}
   throwingRange: {fileID: 0}
+  lockpickPanel: {fileID: 3736644200308240084}
 --- !u!114 &3055416418816347705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -946,6 +948,7 @@ RectTransform:
   - {fileID: 7553331925711837090}
   - {fileID: 1844511878485769812}
   - {fileID: 2445515053292416930}
+  - {fileID: 9110005976710933546}
   m_Father: {fileID: 5960383026429316139}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3012,6 +3015,41 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3698779071997460995}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4694190626668975402}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &3736644200308240084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9110005976710933546}
+  m_Layer: 5
+  m_Name: LockPickPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &9110005976710933546
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3736644200308240084}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}

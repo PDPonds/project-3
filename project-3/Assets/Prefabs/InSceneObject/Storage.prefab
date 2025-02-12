@@ -67,8 +67,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96f8d0db40eb8b4e8c486b32b050a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionName: Search
   slots: []
+  MaxLockCount: 8
+  StartShowLockCount: 2
 --- !u!1 &2883954756929600831
 GameObject:
   m_ObjectHideFlags: 0

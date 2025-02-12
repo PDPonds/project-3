@@ -12,6 +12,8 @@ public class InputManager : MonoBehaviour
             inputSystem.PlayerInput.Movement.performed += i => GameManager.Instance.moveInput = i.ReadValue<Vector2>();
             inputSystem.PlayerInput.MouseInput.performed += i => GameManager.Instance.mousePos = i.ReadValue<Vector2>();
 
+            inputSystem.PlayerInput.ArrowInput.performed += i => GameManager.Instance.arrowInput = i.ReadValue<Vector2>();
+
             inputSystem.PlayerInput.Sprint.performed += i => GameManager.Instance.isRunning = true;
             inputSystem.PlayerInput.Sprint.canceled += i => GameManager.Instance.isRunning = false;
 
@@ -27,6 +29,8 @@ public class InputManager : MonoBehaviour
 
             inputSystem.PlayerInput.UseItem.performed += i => UseItemPerformed();
 
+            inputSystem.PlayerInput.Dash.performed += i => Dash_performed();
+
         }
 
         inputSystem.Enable();
@@ -35,6 +39,24 @@ public class InputManager : MonoBehaviour
     private void OnDisable()
     {
         inputSystem.Disable();
+    }
+
+    private void Dash_performed()
+    {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+        if (GameManager.Instance.curPlayer == null) return;
+
+        if (GameManager.Instance.curPlayer.IsState(PlayerState.ShowUI))
+        {
+            if (UIManager.Instance.IsLockPickActive())
+            {
+                UIManager.Instance.TryPickLock();
+            }
+        }
+        else
+        {
+            GameManager.Instance.curPlayer.Dash();
+        }
     }
 
     public void AttackPerformed()
@@ -54,4 +76,5 @@ public class InputManager : MonoBehaviour
         if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
         GameManager.Instance.curPlayer.UseItem();
     }
+
 }

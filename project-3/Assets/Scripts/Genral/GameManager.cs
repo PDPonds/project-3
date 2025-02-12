@@ -29,6 +29,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] LayerMask mousePosMask;
     [HideInInspector] public Vector2 mousePos;
     [HideInInspector] public Vector2 moveInput;
+    [HideInInspector] public Vector2 arrowInput;
     [Header("===== Select Map =====")]
     [HideInInspector] public MapTypeSO curMapSelect;
 
@@ -188,6 +189,26 @@ public class GameManager : Singleton<GameManager>
     {
         UIManager.Instance.driveButton.interactable = true;
         curMapSelect = map;
+    }
+
+    #endregion
+
+    #region Suffle
+    public List<int> ShuffleInt(List<int> ts)
+    {
+        List<int> result = new List<int>();
+        result.AddRange(ts);
+        int count = result.Count;
+        int last = count - 1;
+        for (var i = 0; i < last; ++i)
+        {
+            int r = UnityEngine.Random.Range(i, count);
+            var tmp = result[i];
+            result[i] = result[r];
+            result[r] = tmp;
+        }
+
+        return result;
     }
 
     #endregion

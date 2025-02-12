@@ -40,6 +40,9 @@ public class PlayerManager : MonoBehaviour, IDamageable
     [HideInInspector] public float actionTime;
     public event Action onAction;
 
+    [Header("===== Lock Pick =====")]
+    float curLockPickDelay;
+
     public void Setup()
     {
         rb = GetComponent<Rigidbody>();
@@ -212,6 +215,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
                 break;
             case PlayerState.EndAnyAction:
                 UIManager.Instance.HideThrowingVisual();
+                UIManager.Instance.HideLockPick();
                 SwitchState(PlayerState.Normal);
                 break;
         }
@@ -234,6 +238,11 @@ public class PlayerManager : MonoBehaviour, IDamageable
                 break;
             case PlayerState.ShowUI:
                 curSpeed = 0;
+                if (UIManager.Instance.IsLockPickActive())
+                {
+                    DecreaseLockPickDelay();
+                    LockPickController();
+                }
                 break;
             case PlayerState.Action:
 
@@ -578,6 +587,58 @@ public class PlayerManager : MonoBehaviour, IDamageable
             if (itemSlotPrefab.curSlot.item is HealItemSO healItem)
             {
                 Debug.Log("Heal");
+            }
+        }
+    }
+
+    #endregion
+
+    #region Dash
+
+    public void Dash()
+    {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+
+        if (IsState(PlayerState.Action))
+        {
+            UIManager.Instance.HideActionDuration();
+            SwitchState(PlayerState.EndAnyAction);
+        }
+    }
+
+    #endregion
+
+    #region LockPick
+
+    void LockPickController()
+    {
+        if (curLockPickDelay <= 0)
+        {
+            if (GameManager.Instance.arrowInput.x > 0)
+            {
+                UIManager.Instance.MoveLockPick(1);
+                UIManager.Instance.UpdateLockPickPosition();
+                curLockPickDelay = playerDatas.lockPickDelay;
+            }
+
+            if (GameManager.Instance.arrowInput.x < 0)
+            {
+                UIManager.Instance.MoveLockPick(-1);
+                UIManager.Instance.UpdateLockPickPosition();
+                curLockPickDelay = playerDatas.lockPickDelay;
+
+            }
+        }
+    }
+
+    void DecreaseLockPickDelay()
+    {
+        if (curLockPickDelay > 0)
+        {
+            curLockPickDelay -= Time.deltaTime;
+            if (curLockPickDelay <= 0)
+            {
+                curLockPickDelay = 0;
             }
         }
     }

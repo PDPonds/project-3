@@ -154,6 +154,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84b41f16ba7638c4ca8a35e977719284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curGas: 0
+  maxGas: 0
+  curStatusInfo: {fileID: 0}
 --- !u!114 &2623965695755716905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,5 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96f8d0db40eb8b4e8c486b32b050a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionName: Vehicle Storage
   slots: []
+  MaxLockCount: 8
+  StartShowLockCount: 2

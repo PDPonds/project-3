@@ -11,7 +11,14 @@ public class DoorObject : MonoBehaviour, IActionObject, ILockable
         if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
         if (GameManager.Instance.curPlayer == null) return;
 
-        GameManager.Instance.curPlayer.TeleportPlayer(behideDoorPosition.position);
+        if (IsLocked)
+        {
+
+        }
+        else
+        {
+            GameManager.Instance.curPlayer.TeleportPlayer(behideDoorPosition.position);
+        }
     }
 
     public string ActionName()

@@ -67,6 +67,11 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Material throwingAbleMat;
     [SerializeField] Material unThrowingAbleMat;
     [SerializeField] Transform throwingRange;
+    [Header("===== Lock Pick =====")]
+    [SerializeField] GameObject lockpickPanel;
+    int NextLockCount;
+    int CurLockPickPosition;
+    int MaxLockCount;
 
     private void Awake()
     {
@@ -526,6 +531,57 @@ public class UIManager : Singleton<UIManager>
         if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
         coinText.text = GameManager.Instance.curPlayer.playerDatas.coin.ToString();
     }
+    #endregion
+
+    #region Lock Pick
+
+    public void ShowLockPick(List<int> lockPos)
+    {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+        lockpickPanel.gameObject.SetActive(true);
+        NextLockCount = 1;
+        MaxLockCount = lockPos.Count;
+        Debug.Log(MaxLockCount);
+        UpdateLockPickPosition();
+        UpdateLockPickNumber();
+        GameManager.Instance.curPlayer.SwitchState(PlayerState.ShowUI);
+    }
+
+    public void MoveLockPick(int dir)
+    {
+        CurLockPickPosition += dir;
+        if (CurLockPickPosition < 1) CurLockPickPosition = 1;
+        if (CurLockPickPosition > MaxLockCount) CurLockPickPosition = MaxLockCount;
+        Debug.Log(CurLockPickPosition);
+    }
+
+    public void TryPickLock()
+    {
+        Debug.Log("Try Lock Pick");
+        UpdateLockPickNumber();
+    }
+
+    public void UpdateLockPickPosition()
+    {
+
+    }
+
+    public void UpdateLockPickNumber()
+    {
+
+    }
+
+    public void HideLockPick()
+    {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+        lockpickPanel.gameObject.SetActive(false);
+    }
+
+    public bool IsLockPickActive()
+    {
+        return lockpickPanel.activeSelf;
+    }
+
     #endregion
 
 }
