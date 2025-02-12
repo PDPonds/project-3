@@ -227,13 +227,11 @@ public class UIManager : Singleton<UIManager>
             InteractiveChoicePrefab choice_fillGas = actionChoice_fillGas.GetComponent<InteractiveChoicePrefab>();
             choice_fillGas.Setup("Fill Gas", vehicleObject.onFillGas, () =>
             {
-                if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlot))
+                if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlot)
+                && itemSlot.curSlot.item is GasTankItemSO gasTank && itemSlot.curSlot.curValue > 0)
                 {
-                    if (itemSlot.curSlot.item is GasTankItemSO gasTank &&
-                    itemSlot.curSlot.curValue > 0)
-                    {
-                        return true;
-                    }
+                    return true;
+
                 }
 
                 return false;
@@ -243,13 +241,10 @@ public class UIManager : Singleton<UIManager>
             InteractiveChoicePrefab choice_repair = actionChoice_repair.GetComponent<InteractiveChoicePrefab>();
             choice_repair.Setup("Repair", vehicleObject.onRepair, () =>
             {
-                if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlot))
+                if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlot)
+                && itemSlot.curSlot.item is GearBoxItemSO gearBox && itemSlot.curSlot.curValue > 0)
                 {
-                    if (itemSlot.curSlot.item is GearBoxItemSO gearBox &&
-                    itemSlot.curSlot.curValue > 0)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
 
                 return false;
@@ -260,7 +255,27 @@ public class UIManager : Singleton<UIManager>
         {
             GameObject actionChoice = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
             InteractiveChoicePrefab choice = actionChoice.GetComponent<InteractiveChoicePrefab>();
-            choice.Setup(actionObject, () => { return true; });
+            choice.Setup(actionObject, () =>
+            {
+                if (interactiveObj.TryGetComponent<ILockable>(out ILockable lockable))
+                {
+                    if (lockable.IsLocked)
+                    {
+                        if (lockable.IsLocked && GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab itemSlot)
+                        && itemSlot.curSlot.item.itemID == 99)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else return true;
+                }
+                return true;
+
+            });
         }
 
     }

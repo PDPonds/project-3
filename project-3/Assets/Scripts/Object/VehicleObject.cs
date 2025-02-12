@@ -80,7 +80,6 @@ public class VehicleObject : MonoBehaviour, IDamageable
 
     void FillGas()
     {
-        Debug.Log("Fill Gas");
         curStatusInfo?.UpdateStatus(maxGas, curGas, maxHP, curHP);
     }
 

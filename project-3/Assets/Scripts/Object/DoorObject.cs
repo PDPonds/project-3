@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class DoorObject : MonoBehaviour, IActionObject
+public class DoorObject : MonoBehaviour, IActionObject, ILockable
 {
     [SerializeField] Transform behideDoorPosition;
-    [SerializeField] string doorActionName;
+
+    public bool IsLocked { get; set; }
 
     public void Action()
     {
@@ -15,6 +16,7 @@ public class DoorObject : MonoBehaviour, IActionObject
 
     public string ActionName()
     {
-        return doorActionName;
+        if (IsLocked) return "Unlock";
+        else return "Open Door";
     }
 }

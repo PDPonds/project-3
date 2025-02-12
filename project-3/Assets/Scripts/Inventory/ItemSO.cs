@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum ItemType
 {
-    Weapon, GearBox, Gastank, Food, Drink, Heal, Ammo
+    Weapon, GearBox, Gastank, Food, Drink, Heal, Ammo , General
 }
 
 public class ItemSO : ScriptableObject

@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StorageObject : MonoBehaviour, IActionObject
+public class StorageObject : MonoBehaviour, IActionObject, ILockable
 {
-    public string actionName;
     public List<ItemSlot> slots = new List<ItemSlot>();
+
+    public bool IsLocked { get; set; }
+
+    private void Start()
+    {
+        IsLocked = true;
+    }
 
     #region Action
     public void Action()
@@ -16,7 +22,8 @@ public class StorageObject : MonoBehaviour, IActionObject
 
     public string ActionName()
     {
-        return actionName;
+        if (IsLocked) return "Unlock";
+        else return "Open";
     }
     #endregion
 
