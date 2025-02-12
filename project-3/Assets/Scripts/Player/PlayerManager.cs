@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum PlayerState
 {
-    Normal, Injury, ShowUI, EndAnyAction, Draging, Action, Aim
+    Normal, Injury, ShowUI, EndAnyAction, Action, Aim
 }
 
 public class PlayerManager : MonoBehaviour, IDamageable
@@ -34,9 +34,6 @@ public class PlayerManager : MonoBehaviour, IDamageable
     [HideInInspector] public float reloadTime;
     [HideInInspector] public float throwingArea;
     [HideInInspector] public float throwingRange;
-
-    [Header("===== Drag =====")]
-    [HideInInspector] public IDragable curDragObject;
 
     [Header("===== Action =====")]
     [HideInInspector] public float maxActionTime;
@@ -84,7 +81,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     void RotationHandle()
     {
-        if (IsState(PlayerState.Draging) || IsState(PlayerState.Action) || IsState(PlayerState.ShowUI)) return;
+        if (IsState(PlayerState.Action) || IsState(PlayerState.ShowUI)) return;
 
         if (!IsState(PlayerState.Aim))
         {
@@ -151,7 +148,6 @@ public class PlayerManager : MonoBehaviour, IDamageable
             {
                 Collider targetCol = interactivCol[0];
                 if (targetCol.TryGetComponent<IActionObject>(out IActionObject iaction) ||
-                    targetCol.TryGetComponent<IDragable>(out IDragable idragable) ||
                     targetCol.TryGetComponent<VehicleObject>(out VehicleObject vehicle))
                 {
                     UIManager.Instance.ShowInteractiveKey(targetCol.transform.position);
@@ -238,11 +234,6 @@ public class PlayerManager : MonoBehaviour, IDamageable
                 break;
             case PlayerState.ShowUI:
                 curSpeed = 0;
-                break;
-            case PlayerState.Draging:
-
-                curSpeed = playerDatas.dragingSpeed;
-
                 break;
             case PlayerState.Action:
 
@@ -403,12 +394,6 @@ public class PlayerManager : MonoBehaviour, IDamageable
         {
             if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
 
-            if (IsState(PlayerState.Draging))
-            {
-                curDragObject.EndDrag();
-                return;
-            }
-
             if (IsState(PlayerState.ShowUI)) return;
 
             if (IsState(PlayerState.Action))
@@ -523,12 +508,6 @@ public class PlayerManager : MonoBehaviour, IDamageable
     public void UseItem()
     {
         if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
-
-        if (IsState(PlayerState.Draging))
-        {
-            curDragObject.EndDrag();
-            return;
-        }
 
         if (IsState(PlayerState.Action))
         {

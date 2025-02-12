@@ -263,13 +263,6 @@ public class UIManager : Singleton<UIManager>
             choice.Setup(actionObject, () => { return true; });
         }
 
-        if (interactiveObj.TryGetComponent<IDragable>(out IDragable dragable))
-        {
-            GameObject actionChoice = Instantiate(interactiveChoicePrefab, interactiveChoiceParent);
-            InteractiveChoicePrefab choice = actionChoice.GetComponent<InteractiveChoicePrefab>();
-            choice.Setup(dragable, () => { return true; });
-        }
-
     }
 
     public void HideInteractiveChoice()

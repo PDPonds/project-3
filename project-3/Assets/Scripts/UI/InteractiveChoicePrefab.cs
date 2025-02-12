@@ -33,17 +33,6 @@ public class InteractiveChoicePrefab : MonoBehaviour
         button.onClick.AddListener(actionObj.Action);
     }
 
-    public void Setup(IDragable dragable, EnableInteractiveCondition condition)
-    {
-        interactiveChoiceText.text = dragable.DragName();
-
-        enableInteractiveCondition += condition;
-
-        button = GetComponent<Button>();
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(dragable.BeginDrag);
-    }
-
     public void Setup(string actionName, UnityAction action, EnableInteractiveCondition condition)
     {
         interactiveChoiceText.text = actionName;

@@ -99,12 +99,6 @@ public class GameManager : Singleton<GameManager>
 
         if (curPlayer.IsState(PlayerState.Aim)) curPlayer.SwitchState(PlayerState.EndAnyAction);
 
-        if (curPlayer.IsState(PlayerState.Draging))
-        {
-            UIManager.Instance.GenerateText("Draging", 2f);
-            return;
-        }
-
         if (curPlayer.IsState(PlayerState.Action))
         {
             curPlayer.SwitchState(PlayerState.EndAnyAction);

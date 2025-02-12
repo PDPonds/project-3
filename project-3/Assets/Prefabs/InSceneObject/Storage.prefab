@@ -10,9 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8003434338734397477}
   - component: {fileID: 378007298388513294}
-  - component: {fileID: 5905017631911228596}
   - component: {fileID: 74911294532878104}
-  - component: {fileID: 6972071301881063067}
   m_Layer: 6
   m_Name: Storage
   m_TagString: Untagged
@@ -57,33 +55,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &5905017631911228596
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1945438376758771446}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
 --- !u!114 &74911294532878104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,19 +69,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: Search
   slots: []
---- !u!114 &6972071301881063067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1945438376758771446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 759a9ed4323a6374e8d79a868a0dc685, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDraging: 0
 --- !u!1 &2883954756929600831
 GameObject:
   m_ObjectHideFlags: 0
