@@ -69,6 +69,12 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Transform throwingRange;
     [Header("===== Lock Pick =====")]
     [SerializeField] GameObject lockpickPanel;
+    [SerializeField] Transform lockParent;
+    [SerializeField] GameObject lockPrefab;
+    [SerializeField] Transform pickVisual;
+    ILockable curLockPicking;
+    List<LockPrefab> lockPrefabs = new List<LockPrefab>();
+
     int NextLockCount;
     int CurLockPickPosition;
     int MaxLockCount;
@@ -535,15 +541,16 @@ public class UIManager : Singleton<UIManager>
 
     #region Lock Pick
 
-    public void ShowLockPick(List<int> lockPos)
+    public void ShowLockPick(List<int> lockPos, int startShowCount, ILockable locking)
     {
         if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
         lockpickPanel.gameObject.SetActive(true);
         NextLockCount = 1;
+        CurLockPickPosition = 1;
+        curLockPicking = locking;
         MaxLockCount = lockPos.Count;
-        Debug.Log(MaxLockCount);
-        UpdateLockPickPosition();
-        UpdateLockPickNumber();
+        InitLock(lockPos, startShowCount);
+        UpdatePickPosition();
         GameManager.Instance.curPlayer.SwitchState(PlayerState.ShowUI);
     }
 
@@ -552,28 +559,70 @@ public class UIManager : Singleton<UIManager>
         CurLockPickPosition += dir;
         if (CurLockPickPosition < 1) CurLockPickPosition = 1;
         if (CurLockPickPosition > MaxLockCount) CurLockPickPosition = MaxLockCount;
-        Debug.Log(CurLockPickPosition);
+        UpdatePickPosition();
     }
 
     public void TryPickLock()
     {
-        Debug.Log("Try Lock Pick");
-        UpdateLockPickNumber();
+        if (lockPrefabs[CurLockPickPosition - 1].CheckCorrectNumber(NextLockCount))
+        {
+            lockPrefabs[CurLockPickPosition - 1].ShowNumber();
+            lockPrefabs[CurLockPickPosition - 1].SetVisualColor(Color.green);
+            if (NextLockCount < MaxLockCount)
+                NextLockCount++;
+            else
+            {
+                curLockPicking.IsLocked = false;
+                curLockPicking.ActionAfterUnlock();
+                HideLockPick();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < lockPrefabs.Count; i++)
+            {
+                if (lockPrefabs[i].CheckCorrectNumber(1) || lockPrefabs[i].CheckCorrectNumber(2))
+                {
+                    lockPrefabs[i].ShowNumber();
+                }
+                else
+                {
+                    lockPrefabs[i].ShowQuestionMask();
+                }
+                lockPrefabs[i].SetVisualColor(Color.white);
+            }
+            NextLockCount = 1;
+        }
     }
 
-    public void UpdateLockPickPosition()
+    void InitLock(List<int> lockPos, int startShowCount)
     {
+        if (lockPos.Count == 0) return;
 
+        ClearParent(lockParent);
+        lockPrefabs.Clear();
+
+        for (int i = 0; i < lockPos.Count; i++)
+        {
+            bool isShow = lockPos[i] <= startShowCount;
+            GameObject obj = Instantiate(lockPrefab, lockParent);
+            LockPrefab lockprefab = obj.GetComponent<LockPrefab>();
+            lockprefab.Setup(lockPos[i], isShow);
+            lockPrefabs.Add(lockprefab);
+        }
     }
 
-    public void UpdateLockPickNumber()
+    public void UpdatePickPosition()
     {
-
+        float posX = lockPrefabs[CurLockPickPosition - 1].GetComponent<RectTransform>().anchoredPosition.x;
+        pickVisual.GetComponent<RectTransform>().anchoredPosition = new Vector3(posX, 0, 0);
     }
+
 
     public void HideLockPick()
     {
         if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+        curLockPicking = null;
         lockpickPanel.gameObject.SetActive(false);
     }
 

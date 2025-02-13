@@ -7,10 +7,12 @@ public class StorageObject : MonoBehaviour, IActionObject, ILockable
     public List<ItemSlot> slots = new List<ItemSlot>();
 
     [Header("===== Lock =====")]
-    public int MaxLockCount;
-    public int StartShowLockCount;
+    [SerializeField] int maxLockCount;
+    [SerializeField] int startShowLockCount;
     public bool IsLocked { get; set; }
-    List<int> LockPos = new List<int>();
+    public List<int> LockPos { get; set; }
+    public int MaxLockCount { get { return maxLockCount; } set { maxLockCount = value; } }
+    public int StartShowLockCount { get { return startShowLockCount; } set { startShowLockCount = value; } }
 
     private void Start()
     {
@@ -24,7 +26,8 @@ public class StorageObject : MonoBehaviour, IActionObject, ILockable
 
         if (IsLocked)
         {
-            for (int i = 1; i <= MaxLockCount; i++)
+            LockPos = new List<int>();
+            for (int i = 1; i <= maxLockCount; i++)
             {
                 LockPos.Add(i);
             }
@@ -37,7 +40,7 @@ public class StorageObject : MonoBehaviour, IActionObject, ILockable
     {
         if (IsLocked)
         {
-            UIManager.Instance.ShowLockPick(LockPos);
+            UIManager.Instance.ShowLockPick(LockPos, StartShowLockCount, this);
         }
         else
         {
@@ -50,6 +53,14 @@ public class StorageObject : MonoBehaviour, IActionObject, ILockable
     {
         if (IsLocked) return "Unlock";
         else return "Open";
+    }
+    #endregion
+
+    #region ILock
+    public void ActionAfterUnlock()
+    {
+        GameManager.Instance.curStorageObj = this;
+        UIManager.Instance.ToggleInventory(ShowInventoryType.Storage);
     }
     #endregion
 

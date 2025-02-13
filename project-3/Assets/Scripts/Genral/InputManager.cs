@@ -12,8 +12,6 @@ public class InputManager : MonoBehaviour
             inputSystem.PlayerInput.Movement.performed += i => GameManager.Instance.moveInput = i.ReadValue<Vector2>();
             inputSystem.PlayerInput.MouseInput.performed += i => GameManager.Instance.mousePos = i.ReadValue<Vector2>();
 
-            inputSystem.PlayerInput.ArrowInput.performed += i => GameManager.Instance.arrowInput = i.ReadValue<Vector2>();
-
             inputSystem.PlayerInput.Sprint.performed += i => GameManager.Instance.isRunning = true;
             inputSystem.PlayerInput.Sprint.canceled += i => GameManager.Instance.isRunning = false;
 

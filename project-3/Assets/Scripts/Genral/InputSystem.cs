@@ -109,15 +109,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ArrowInput"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""9af52f20-16d1-4a26-9a6b-fc11bd84714b"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Dash"",
                     ""type"": ""Button"",
                     ""id"": ""723bf80b-d794-4da0-b60e-639b025967f2"",
@@ -272,61 +263,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""2D Vector"",
-                    ""id"": ""96b71e13-4c6b-4d2a-9e0b-48f486d13c3b"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ArrowInput"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""2905fd22-93a6-408f-ba30-0d13e6eb9282"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ArrowInput"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""d983284d-ea51-4f86-8431-a1d2bd3a52ef"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ArrowInput"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""f33c323d-c073-4cee-8aea-6b2a2a425621"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ArrowInput"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""64e12fd9-ba0d-48db-9ad6-7b588effb570"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ArrowInput"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""bdd1f74b-8ca2-4aa2-a67f-5403afd6d122"",
                     ""path"": ""<Keyboard>/space"",
@@ -353,7 +289,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_PlayerInput_Select_HandSlot_2 = m_PlayerInput.FindAction("Select_HandSlot_2", throwIfNotFound: true);
         m_PlayerInput_Attack = m_PlayerInput.FindAction("Attack", throwIfNotFound: true);
         m_PlayerInput_UseItem = m_PlayerInput.FindAction("UseItem", throwIfNotFound: true);
-        m_PlayerInput_ArrowInput = m_PlayerInput.FindAction("ArrowInput", throwIfNotFound: true);
         m_PlayerInput_Dash = m_PlayerInput.FindAction("Dash", throwIfNotFound: true);
     }
 
@@ -430,7 +365,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerInput_Select_HandSlot_2;
     private readonly InputAction m_PlayerInput_Attack;
     private readonly InputAction m_PlayerInput_UseItem;
-    private readonly InputAction m_PlayerInput_ArrowInput;
     private readonly InputAction m_PlayerInput_Dash;
     public struct PlayerInputActions
     {
@@ -445,7 +379,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         public InputAction @Select_HandSlot_2 => m_Wrapper.m_PlayerInput_Select_HandSlot_2;
         public InputAction @Attack => m_Wrapper.m_PlayerInput_Attack;
         public InputAction @UseItem => m_Wrapper.m_PlayerInput_UseItem;
-        public InputAction @ArrowInput => m_Wrapper.m_PlayerInput_ArrowInput;
         public InputAction @Dash => m_Wrapper.m_PlayerInput_Dash;
         public InputActionMap Get() { return m_Wrapper.m_PlayerInput; }
         public void Enable() { Get().Enable(); }
@@ -483,9 +416,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @UseItem.started += instance.OnUseItem;
             @UseItem.performed += instance.OnUseItem;
             @UseItem.canceled += instance.OnUseItem;
-            @ArrowInput.started += instance.OnArrowInput;
-            @ArrowInput.performed += instance.OnArrowInput;
-            @ArrowInput.canceled += instance.OnArrowInput;
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
@@ -520,9 +450,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @UseItem.started -= instance.OnUseItem;
             @UseItem.performed -= instance.OnUseItem;
             @UseItem.canceled -= instance.OnUseItem;
-            @ArrowInput.started -= instance.OnArrowInput;
-            @ArrowInput.performed -= instance.OnArrowInput;
-            @ArrowInput.canceled -= instance.OnArrowInput;
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
@@ -554,7 +481,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         void OnSelect_HandSlot_2(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnUseItem(InputAction.CallbackContext context);
-        void OnArrowInput(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
     }
 }

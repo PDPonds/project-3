@@ -29,7 +29,6 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] LayerMask mousePosMask;
     [HideInInspector] public Vector2 mousePos;
     [HideInInspector] public Vector2 moveInput;
-    [HideInInspector] public Vector2 arrowInput;
     [Header("===== Select Map =====")]
     [HideInInspector] public MapTypeSO curMapSelect;
 

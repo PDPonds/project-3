@@ -170,5 +170,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slots: []
-  MaxLockCount: 8
-  StartShowLockCount: 2
+  maxLockCount: 5
+  startShowLockCount: 2

@@ -614,17 +614,17 @@ public class PlayerManager : MonoBehaviour, IDamageable
     {
         if (curLockPickDelay <= 0)
         {
-            if (GameManager.Instance.arrowInput.x > 0)
+            if (GameManager.Instance.moveInput.x > 0)
             {
                 UIManager.Instance.MoveLockPick(1);
-                UIManager.Instance.UpdateLockPickPosition();
+                UIManager.Instance.UpdatePickPosition();
                 curLockPickDelay = playerDatas.lockPickDelay;
             }
 
-            if (GameManager.Instance.arrowInput.x < 0)
+            if (GameManager.Instance.moveInput.x < 0)
             {
                 UIManager.Instance.MoveLockPick(-1);
-                UIManager.Instance.UpdateLockPickPosition();
+                UIManager.Instance.UpdatePickPosition();
                 curLockPickDelay = playerDatas.lockPickDelay;
 
             }
