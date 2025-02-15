@@ -564,7 +564,7 @@ public class UIManager : Singleton<UIManager>
 
     public void TryPickLock()
     {
-        if (lockPrefabs[CurLockPickPosition - 1].CheckCorrectNumber(NextLockCount))
+        if (lockPrefabs[CurLockPickPosition - 1].number == NextLockCount)
         {
             lockPrefabs[CurLockPickPosition - 1].ShowNumber();
             lockPrefabs[CurLockPickPosition - 1].SetVisualColor(Color.green);
@@ -577,11 +577,11 @@ public class UIManager : Singleton<UIManager>
                 HideLockPick();
             }
         }
-        else
+        else if (lockPrefabs[CurLockPickPosition - 1].number > NextLockCount)
         {
             for (int i = 0; i < lockPrefabs.Count; i++)
             {
-                if (lockPrefabs[i].CheckCorrectNumber(1) || lockPrefabs[i].CheckCorrectNumber(2))
+                if (lockPrefabs[i].number == 1 || lockPrefabs[i].number == 2)
                 {
                     lockPrefabs[i].ShowNumber();
                 }

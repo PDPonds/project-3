@@ -11,11 +11,12 @@ public class BuildingTile : MonoBehaviour
     public void SpawnInSideBuiding(Transform parent)
     {
         GameObject go = Instantiate(inSideBuildingPrefab, parent);
+        go.transform.localPosition = new Vector3(-50f, 0, 0);
         Building building = go.GetComponent<Building>();
-        outSideDoor.SetBehideDoorPosition(building.inSideDoor.fontDoorPosition);
+        outSideDoor.SetLinkDoor(building.inSideDoor);
         outSideDoor.isBuildingTile = true;
         outSideDoor.buildingObj = go;
-        building.inSideDoor.SetBehideDoorPosition(outSideDoor.fontDoorPosition);
+        building.inSideDoor.SetLinkDoor(outSideDoor);
         building.inSideDoor.isBuildingTile = false;
         building.inSideDoor.buildingObj = go;
 

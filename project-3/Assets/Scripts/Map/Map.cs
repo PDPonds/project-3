@@ -20,6 +20,7 @@ public class Map : MonoBehaviour
     {
         curMapType = mapTypeSO;
         grid = GenerateGrid();
+        UIManager.Instance.ClearParent(transform);
         RandomRoad();
         GenerateMapObject();
         GenerateTile();
@@ -57,6 +58,13 @@ public class Map : MonoBehaviour
         z = Mathf.FloorToInt((worldPos - origin).z / cellSize);
     }
 
+    void InitExitPoint(Vector3 position, float rotationY)
+    {
+        Quaternion rotation = Quaternion.Euler(0, rotationY, 0);
+        GameObject go = Instantiate(ExitPoint, position, rotation);
+        go.transform.SetParent(transform);
+    }
+
     void RandomRoad()
     {
         if (grid != null)
@@ -87,6 +95,21 @@ public class Map : MonoBehaviour
                         }
                     }
                 }
+
+                GameManager.Instance.playerSpawnPoint = GettWorldPosition(mapSize - 1, zIndex);
+                int rand = Random.Range(0, 9);
+                if (rand >= 0 && rand < 4)
+                {
+                    InitExitPoint(GettWorldPosition(0, zIndex), 0);
+                }
+                else if (rand >= 3 && rand < 7)
+                {
+                    InitExitPoint(GettWorldPosition(xIndex, mapSize - 1), 90);
+                }
+                else
+                {
+                    InitExitPoint(GettWorldPosition(xIndex, 0), -90);
+                }
             }
             else
             {
@@ -96,6 +119,9 @@ public class Map : MonoBehaviour
                     grid[x, zIndex].isRoad = true;
                     grid[x, zIndex].yRotation = 0;
                 }
+
+                GameManager.Instance.playerSpawnPoint = GettWorldPosition(mapSize - 1, zIndex);
+                InitExitPoint(GettWorldPosition(0, zIndex), 0);
             }
 
             for (int x = 0; x < mapSize; x++)
@@ -116,7 +142,6 @@ public class Map : MonoBehaviour
     {
         if (grid != null)
         {
-            UIManager.Instance.ClearParent(transform);
             for (int x = 0; x < mapSize; x++)
             {
                 for (int z = 0; z < mapSize; z++)
@@ -189,8 +214,6 @@ public class Map : MonoBehaviour
         List<Tile> allTile = curMapType.GetAllTilePrefab(b, n);
         if (allTile.Count > 0)
         {
-            GameObject buildingParent = new GameObject("Building Parent");
-
             for (int x = 0; x < allTile.Count; x++)
             {
                 bool isBuilding = allTile[x].isBuilding;
@@ -205,7 +228,7 @@ public class Map : MonoBehaviour
                     cell.hasTile = true;
 
                     BuildingTile buildingTile = go.GetComponent<BuildingTile>();
-                    buildingTile.SpawnInSideBuiding(buildingParent.transform);
+                    buildingTile.SpawnInSideBuiding(transform);
                 }
                 else
                 {

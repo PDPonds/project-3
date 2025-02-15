@@ -6,7 +6,7 @@ public class DoorObject : MonoBehaviour, IActionObject, ILockable
     [Header("===== Font Door Position =====")]
     public Transform fontDoorPosition;
 
-    Transform behideDoorPosition;
+    DoorObject linkDoor;
 
     [Header("===== Cam Rotation =====")]
     [SerializeField] float YRotation;
@@ -23,9 +23,13 @@ public class DoorObject : MonoBehaviour, IActionObject, ILockable
     [HideInInspector] public bool isBuildingTile;
     [HideInInspector] public GameObject buildingObj;
 
-    private void Start()
+    private void Awake()
     {
         IsLocked = true;
+    }
+
+    private void Start()
+    {
         Setup();
     }
 
@@ -42,9 +46,9 @@ public class DoorObject : MonoBehaviour, IActionObject, ILockable
         }
     }
 
-    public void SetBehideDoorPosition(Transform b)
+    public void SetLinkDoor(DoorObject door)
     {
-        behideDoorPosition = b;
+        linkDoor = door;
     }
 
     public void Action()
@@ -67,13 +71,14 @@ public class DoorObject : MonoBehaviour, IActionObject, ILockable
         if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
         if (GameManager.Instance.curPlayer == null) return;
 
-        GameManager.Instance.curPlayer.TeleportPlayer(behideDoorPosition.position);
+        GameManager.Instance.curPlayer.TeleportPlayer(linkDoor.fontDoorPosition.position);
         GameManager.Instance.curCameraController.SetYRotation(YRotation, moveRotationSpeed);
+        linkDoor.IsLocked = false;
+        IsLocked = false;
         if (isBuildingTile) buildingObj.SetActive(true);
         else buildingObj.SetActive(false);
         UIManager.Instance.CloseInteractiveChoice();
         GameManager.Instance.curPlayer.SwitchState(PlayerState.EndAnyAction);
-
     }
 
     public string ActionName()

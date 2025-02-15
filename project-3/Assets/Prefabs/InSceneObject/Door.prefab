@@ -165,10 +165,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fontDoorPosition: {fileID: 4739926637328384362}
-  YRotation: 45
+  YRotation: 0
   moveRotationSpeed: 2
   maxLockCount: 5
   startShowLockCount: 2
+  isBuildingTile: 0
+  buildingObj: {fileID: 0}
 --- !u!65 &6684541869517407179
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ public class LockPrefab : MonoBehaviour
     [SerializeField] Image visual;
     [SerializeField] TextMeshProUGUI numberText;
 
-    int number;
+    [HideInInspector] public int number;
 
     public void Setup(int number, bool isShowNumber)
     {
@@ -31,9 +31,5 @@ public class LockPrefab : MonoBehaviour
         visual.color = color;
     }
 
-    public bool CheckCorrectNumber(int nextNumber)
-    {
-        return this.number == nextNumber;
-    }
 
 }

@@ -14,9 +14,13 @@ public class StorageObject : MonoBehaviour, IActionObject, ILockable
     public int MaxLockCount { get { return maxLockCount; } set { maxLockCount = value; } }
     public int StartShowLockCount { get { return startShowLockCount; } set { startShowLockCount = value; } }
 
-    private void Start()
+    private void Awake()
     {
         IsLocked = true;
+    }
+
+    private void Start()
+    {
         Setup();
     }
 

@@ -31,6 +31,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public Vector2 moveInput;
     [Header("===== Select Map =====")]
     [HideInInspector] public MapTypeSO curMapSelect;
+    [HideInInspector] public Vector3 playerSpawnPoint;
 
     private void Start()
     {
@@ -50,7 +51,7 @@ public class GameManager : Singleton<GameManager>
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         curPlayer = playerManager;
         playerManager.Setup();
-
+        playerManager.TeleportPlayer(playerSpawnPoint);
         curCameraController.SetupTarget(player.transform);
     }
 

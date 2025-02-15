@@ -53,4 +53,4 @@ MonoBehaviour:
   AllRoads:
   - {fileID: 7067758637515804377, guid: 4dfadbaa572bb8941b26128991b6cf52, type: 3}
   FourWayRoad: {fileID: 7034270175554381311, guid: 951bac0707d63374095a0752cd8507a0, type: 3}
-  ExitPoint: {fileID: 6761189434696444983, guid: 5602fb4e39e529d458c5304063fe586e, type: 3}
+  ExitPoint: {fileID: 6095701835262464930, guid: 5602fb4e39e529d458c5304063fe586e, type: 3}

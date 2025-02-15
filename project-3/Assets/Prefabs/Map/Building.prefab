@@ -163,14 +163,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3144523629577906288}
     m_Modifications:
-    - target: {fileID: 3685977719840691489, guid: 2a2eb73bbb86b1b4b82223428432a948, type: 3}
-      propertyPath: YRotation
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3685977719840691489, guid: 2a2eb73bbb86b1b4b82223428432a948, type: 3}
-      propertyPath: fontDoorPosition
-      value: 
-      objectReference: {fileID: 4992517893181313847}
     - target: {fileID: 5918280200287725223, guid: 2a2eb73bbb86b1b4b82223428432a948, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -231,11 +223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b14131386178dc4eae54b918cd67511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &4992517893181313847 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4739926637328384362, guid: 2a2eb73bbb86b1b4b82223428432a948, type: 3}
-  m_PrefabInstance: {fileID: 328594252550656605}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6246091116771603706 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5918280200287725223, guid: 2a2eb73bbb86b1b4b82223428432a948, type: 3}
