@@ -23,6 +23,7 @@ public class Map : MonoBehaviour
         RandomRoad();
         GenerateMapObject();
         GenerateTile();
+
     }
 
     Cell[,] GenerateGrid()
@@ -188,6 +189,8 @@ public class Map : MonoBehaviour
         List<Tile> allTile = curMapType.GetAllTilePrefab(b, n);
         if (allTile.Count > 0)
         {
+            GameObject buildingParent = new GameObject("Building Parent");
+
             for (int x = 0; x < allTile.Count; x++)
             {
                 bool isBuilding = allTile[x].isBuilding;
@@ -201,6 +204,8 @@ public class Map : MonoBehaviour
                     go.transform.SetParent(transform);
                     cell.hasTile = true;
 
+                    BuildingTile buildingTile = go.GetComponent<BuildingTile>();
+                    buildingTile.SpawnInSideBuiding(buildingParent.transform);
                 }
                 else
                 {
@@ -215,6 +220,7 @@ public class Map : MonoBehaviour
             }
         }
     }
+
 }
 
 

@@ -38,14 +38,16 @@ public class StorageObject : MonoBehaviour, IActionObject, ILockable
     #region Action
     public void Action()
     {
+        if (!GameManager.Instance.IsPhase(GamePhase.DuringGame)) return;
+        if (GameManager.Instance.curPlayer == null) return;
+
         if (IsLocked)
         {
             UIManager.Instance.ShowLockPick(LockPos, StartShowLockCount, this);
         }
         else
         {
-            GameManager.Instance.curStorageObj = this;
-            UIManager.Instance.ToggleInventory(ShowInventoryType.Storage);
+            ActionAfterUnlock();
         }
     }
 
