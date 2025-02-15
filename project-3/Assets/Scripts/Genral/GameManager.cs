@@ -51,7 +51,7 @@ public class GameManager : Singleton<GameManager>
         curPlayer = playerManager;
         playerManager.Setup();
 
-        curCameraController.Setup(player.transform);
+        curCameraController.SetupTarget(player.transform);
     }
 
     void InitCamera(Transform target)
@@ -61,7 +61,7 @@ public class GameManager : Singleton<GameManager>
         GameObject camera = Instantiate(cameraPrefab, Vector3.zero, Quaternion.identity);
         CameraController camControl = camera.GetComponent<CameraController>();
         curCameraController = camControl;
-        camControl.Setup(target);
+        camControl.SetupTarget(target);
     }
 
     #endregion

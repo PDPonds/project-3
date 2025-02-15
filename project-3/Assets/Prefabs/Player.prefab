@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 1035356649606800947}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -224,21 +224,23 @@ MonoBehaviour:
   playerDatas: {fileID: 11400000, guid: 31a7eb915579f1244a1c6c6a0891ab61, type: 2}
   curSpeed: 0
   playerState: 0
-  curHungry: 0
-  curThirsty: 0
   handSlot_1:
     item: {fileID: 0}
     count: 0
     maxValue: 0
     curValue: 0
+    curMag: 0
   handSlot_2:
     item: {fileID: 0}
     count: 0
     maxValue: 0
     curValue: 0
+    curMag: 0
+  isAttack: 0
   bulletSpawnPoint: {fileID: 3532125577194169150}
-  isAim: 0
-  curDragObject: {fileID: 0}
+  reloadTime: 0
+  throwingArea: 0
+  throwingRange: 0
   maxActionTime: 0
   actionTime: 0
 --- !u!136 &7661242239389301900
