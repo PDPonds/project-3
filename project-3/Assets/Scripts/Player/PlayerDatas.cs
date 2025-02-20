@@ -36,9 +36,8 @@ public class PlayerDatas : ScriptableObject
     [Header("- Melee Attack")]
     public float meleeDamage;
     public float meleeAttackRange;
+    public float mellAttackOffset;
     public LayerMask meleeAttackMask;
-    public float attackMoveForce;
-    public float attackMoveDuration;
 
     [Header("===== Player Status =====")]
     public Color hpColor;

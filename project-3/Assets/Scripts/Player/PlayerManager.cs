@@ -462,30 +462,17 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     void MeleeAttack()
     {
-        Collider[] cols = Physics.OverlapSphere(transform.position, playerDatas.meleeAttackRange, playerDatas.meleeAttackMask);
-        Vector3 mouseDir = GameManager.Instance.GetDirToMouse(transform.position);
+        float attackRange = playerDatas.meleeAttackRange;
+        if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab slotPrefab)) attackRange = slotPrefab.curSlot.item.attackRange;
+        Collider[] cols = Physics.OverlapSphere(transform.position + transform.forward * playerDatas.mellAttackOffset, attackRange, playerDatas.meleeAttackMask);
         Vector3 mousePos = GameManager.Instance.GetWorldPosFormMouse();
+        LookAt(mousePos);
         if (cols.Length > 0)
         {
-            Collider col = cols[0];
-            if (col.TryGetComponent<EnemyManager>(out EnemyManager enemyManager))
+            if (cols[0].CompareTag("Enemy") && cols[0].TryGetComponent<IDamageable>(out IDamageable idamable))
             {
-                Vector3 dirToEnemy = enemyManager.transform.position - transform.position;
-                dirToEnemy.Normalize();
-                LookAt(enemyManager.transform.position);
-                StartCoroutine(AddForce(dirToEnemy, playerDatas.attackMoveForce, playerDatas.attackMoveDuration));
-                //Enemy Take Damage
+                idamable.TakeDamage(1);
             }
-            else
-            {
-                LookAt(mousePos);
-                StartCoroutine(AddForce(mouseDir, playerDatas.attackMoveForce, playerDatas.attackMoveDuration));
-            }
-        }
-        else
-        {
-            LookAt(mousePos);
-            StartCoroutine(AddForce(mouseDir, playerDatas.attackMoveForce, playerDatas.attackMoveDuration));
         }
         isAttack = false;
     }
@@ -651,6 +638,11 @@ public class PlayerManager : MonoBehaviour, IDamageable
         Gizmos.DrawWireSphere(transform.position, playerDatas.interactiveRange);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, playerDatas.meleeAttackRange);
+
+        float attackRange = playerDatas.meleeAttackRange;
+        //if (GameManager.Instance.curHandSlot.HasItemInSlot(out ItemSlotPrefab slotPrefab)) attackRange = slotPrefab.curSlot.item.attackRange;
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position + transform.forward * playerDatas.mellAttackOffset, attackRange);
     }
 
 }

@@ -28,6 +28,7 @@ public class EnemyManager : MonoBehaviour, IDamageable
 
     public void TakeDamage(int dmg)
     {
+        Debug.Log("T");
         curHP -= dmg;
         if (curHP <= 0)
         {

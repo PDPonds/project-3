@@ -21,6 +21,7 @@ public class ItemSO : ScriptableObject
     [Header("==== Attack =====")]
     public int damage;
     public float attackDelay;
+    public float attackRange;
     [Header("==== Type =====")]
     public ItemType itemType;
 

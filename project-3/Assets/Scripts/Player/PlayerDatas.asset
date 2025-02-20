@@ -31,12 +31,11 @@ MonoBehaviour:
     m_Bits: 64
   attackDelay: 1
   meleeDamage: 0.75
-  meleeAttackRange: 2
+  meleeAttackRange: 0.5
+  mellAttackOffset: 0.5
   meleeAttackMask:
     serializedVersion: 2
     m_Bits: 128
-  attackMoveForce: 0.1
-  attackMoveDuration: 0.25
   hpColor: {r: 0.7075472, g: 0.21026166, b: 0.22000036, a: 1}
   hungryColor: {r: 0.8773585, g: 0.7014649, b: 0.25244746, a: 1}
   thirstyColor: {r: 0.22530258, g: 0.6636419, b: 0.7830189, a: 1}
