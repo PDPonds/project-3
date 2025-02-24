@@ -31,7 +31,6 @@ public class MapGenerator : Singleton<MapGenerator>
         return maps;
     }
 
-
     public void GenerateMap(MapTypeSO mapTypeSO)
     {
         if (curMap != null) Destroy(curMap);

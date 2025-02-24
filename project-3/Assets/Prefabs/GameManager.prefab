@@ -275,8 +275,8 @@ MonoBehaviour:
     m_Bits: 256
   mousePos: {x: 0, y: 0}
   moveInput: {x: 0, y: 0}
-  arrowInput: {x: 0, y: 0}
   curMapSelect: {fileID: 0}
+  playerSpawnPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &2822165958753336625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,11 +357,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allMapType:
-  - {fileID: 11400000, guid: 90244db4e1a9fa944a56afcc57010c19, type: 2}
   - {fileID: 11400000, guid: 3482304fccf188047a13d2c7bac6b82f, type: 2}
-  - {fileID: 11400000, guid: 9a45444519ff60749883d7e401fac8e4, type: 2}
   - {fileID: 11400000, guid: 93b2426bc9ec29d4498f4ebbeef87de1, type: 2}
   - {fileID: 11400000, guid: c237fa7378aaff74495ab7fdc645cb54, type: 2}
+  - {fileID: 11400000, guid: 90244db4e1a9fa944a56afcc57010c19, type: 2}
   previousMap: []
   mapPrefab: {fileID: 1795285827475126210, guid: 4fd756b18c3cbbc4bb3c162d9d0ddec4, type: 3}
 --- !u!1 &437446672533134641

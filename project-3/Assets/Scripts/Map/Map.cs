@@ -22,9 +22,8 @@ public class Map : MonoBehaviour
         grid = GenerateGrid();
         UIManager.Instance.ClearParent(transform);
         RandomRoad();
-        GenerateMapObject();
+        GenerateRoad();
         GenerateTile();
-
     }
 
     Cell[,] GenerateGrid()
@@ -67,78 +66,102 @@ public class Map : MonoBehaviour
 
     void RandomRoad()
     {
-        if (grid != null)
+        if (curMapType is GeneralMap generalMap)
         {
-            int isXRoad = Random.Range(0, 10);
-            if (isXRoad > 4)
+            if (grid != null)
             {
-                int xIndex = Random.Range(0, mapSize);
-                int zIndex = Random.Range(0, mapSize);
+                int isXRoad = Random.Range(0, 10);
+                if (isXRoad > 4)
+                {
+                    int xIndex = Random.Range(0, mapSize);
+                    int zIndex = Random.Range(0, mapSize);
+                    for (int x = 0; x < mapSize; x++)
+                    {
+                        for (int z = 0; z < mapSize; z++)
+                        {
+                            if (x == xIndex)
+                            {
+                                grid[x, z].isRoad = true;
+                                grid[x, z].yRotation = 90;
+                            }
+                            if (z == zIndex)
+                            {
+                                grid[x, z].isRoad = true;
+                            }
+
+                            if (x == xIndex && z == zIndex)
+                            {
+                                grid[x, z].yRotation = 0;
+                                grid[x, z].isFourWay = true;
+                            }
+                        }
+                    }
+
+                    GameManager.Instance.playerSpawnPoint = GettWorldPosition(mapSize - 1, zIndex);
+                    int rand = Random.Range(0, 9);
+                    if (rand >= 0 && rand < 4)
+                    {
+                        InitExitPoint(GettWorldPosition(0, zIndex), 0);
+                    }
+                    else if (rand >= 3 && rand < 7)
+                    {
+                        InitExitPoint(GettWorldPosition(xIndex, mapSize - 1), 90);
+                    }
+                    else
+                    {
+                        InitExitPoint(GettWorldPosition(xIndex, 0), -90);
+                    }
+                }
+                else
+                {
+                    int zIndex = Random.Range(0, mapSize);
+                    for (int x = 0; x < mapSize; x++)
+                    {
+                        grid[x, zIndex].isRoad = true;
+                        grid[x, zIndex].yRotation = 0;
+                    }
+
+                    GameManager.Instance.playerSpawnPoint = GettWorldPosition(mapSize - 1, zIndex);
+                    InitExitPoint(GettWorldPosition(0, zIndex), 0);
+                }
+
                 for (int x = 0; x < mapSize; x++)
                 {
                     for (int z = 0; z < mapSize; z++)
                     {
-                        if (x == xIndex)
+                        if (z == mapSize - 1 && !grid[x, z].isRoad && !grid[x, z].hasTile)
                         {
-                            grid[x, z].isRoad = true;
-                            grid[x, z].yRotation = 90;
-                        }
-                        if (z == zIndex)
-                        {
-                            grid[x, z].isRoad = true;
-                        }
-
-                        if (x == xIndex && z == zIndex)
-                        {
-                            grid[x, z].yRotation = 0;
-                            grid[x, z].isFourWay = true;
+                            grid[x, z].canPressBuildingTile = true;
                         }
                     }
                 }
 
-                GameManager.Instance.playerSpawnPoint = GettWorldPosition(mapSize - 1, zIndex);
-                int rand = Random.Range(0, 9);
-                if (rand >= 0 && rand < 4)
-                {
-                    InitExitPoint(GettWorldPosition(0, zIndex), 0);
-                }
-                else if (rand >= 3 && rand < 7)
-                {
-                    InitExitPoint(GettWorldPosition(xIndex, mapSize - 1), 90);
-                }
-                else
-                {
-                    InitExitPoint(GettWorldPosition(xIndex, 0), -90);
-                }
             }
-            else
+        }
+        else if (curMapType is CustomMap customMap)
+        {
+            if (grid != null)
             {
-                int zIndex = Random.Range(0, mapSize);
-                for (int x = 0; x < mapSize; x++)
+                for (int i = 0; i < customMap.road.Count; i++)
                 {
-                    grid[x, zIndex].isRoad = true;
-                    grid[x, zIndex].yRotation = 0;
-                }
-
-                GameManager.Instance.playerSpawnPoint = GettWorldPosition(mapSize - 1, zIndex);
-                InitExitPoint(GettWorldPosition(0, zIndex), 0);
-            }
-
-            for (int x = 0; x < mapSize; x++)
-            {
-                for (int z = 0; z < mapSize; z++)
-                {
-                    if (z == mapSize - 1 && !grid[x, z].isRoad && !grid[x, z].hasTile)
+                    grid[customMap.road[i].position.x, customMap.road[i].position.y].isRoad = customMap.road[i].isRoad;
+                    grid[customMap.road[i].position.x, customMap.road[i].position.y].yRotation = customMap.road[i].YRotation;
+                    grid[customMap.road[i].position.x, customMap.road[i].position.y].isFourWay = customMap.road[i].isFourWay;
+                    if (customMap.road[i].isSpawnPoint)
                     {
-                        grid[x, z].canPressBuildingTile = true;
+                        GameManager.Instance.playerSpawnPoint = GettWorldPosition(customMap.road[i].position.x, customMap.road[i].position.y);
+                    }
+
+                    if (customMap.road[i].exitPoint)
+                    {
+                        InitExitPoint(GettWorldPosition(customMap.road[i].position.x, customMap.road[i].position.y), customMap.road[i].exitPointRotation);
                     }
                 }
             }
-
         }
     }
 
-    void GenerateMapObject()
+    void GenerateRoad()
     {
         if (grid != null)
         {
@@ -209,43 +232,66 @@ public class Map : MonoBehaviour
 
     void GenerateTile()
     {
-        int b = GetBuildingEmptyCell().Count;
-        int n = GetNoneBuildingEmptyCell().Count;
-        List<Tile> allTile = curMapType.GetAllTilePrefab(b, n);
-        if (allTile.Count > 0)
+        if (curMapType is GeneralMap generalMap)
         {
-            for (int x = 0; x < allTile.Count; x++)
+            int b = GetBuildingEmptyCell().Count;
+            int n = GetNoneBuildingEmptyCell().Count;
+            List<Tile> allTile = generalMap.GetAllTilePrefab(b, n);
+            if (allTile.Count > 0)
             {
-                bool isBuilding = allTile[x].isBuilding;
-                GameObject prefab = allTile[x].TilePrefab;
-                if (isBuilding)
+                for (int x = 0; x < allTile.Count; x++)
                 {
-                    List<Cell> emptyBuildingCell = GetBuildingEmptyCell();
-                    int rand = Random.Range(0, emptyBuildingCell.Count);
-                    Cell cell = emptyBuildingCell[rand];
-                    GameObject go = Instantiate(prefab, GettWorldPosition(cell), Quaternion.identity);
-                    go.transform.SetParent(transform);
-                    cell.hasTile = true;
+                    bool isBuilding = allTile[x].isBuilding;
+                    GameObject prefab = allTile[x].TilePrefab;
+                    if (isBuilding)
+                    {
+                        List<Cell> emptyBuildingCell = GetBuildingEmptyCell();
+                        int rand = Random.Range(0, emptyBuildingCell.Count);
+                        Cell cell = emptyBuildingCell[rand];
+                        GameObject go = Instantiate(prefab, GettWorldPosition(cell), Quaternion.identity);
+                        go.transform.SetParent(transform);
+                        cell.hasTile = true;
 
-                    BuildingTile buildingTile = go.GetComponent<BuildingTile>();
-                    buildingTile.SpawnInSideBuiding(transform);
+                        BuildingTile buildingTile = go.GetComponent<BuildingTile>();
+                        buildingTile.SpawnInSideBuiding(transform);
+                    }
+                    else
+                    {
+                        List<Cell> emptyNoneBuildingCell = GetNoneBuildingEmptyCell();
+                        int rand = Random.Range(0, emptyNoneBuildingCell.Count);
+                        Cell cell = emptyNoneBuildingCell[rand];
+                        GameObject go = Instantiate(prefab, GettWorldPosition(cell), Quaternion.identity);
+                        go.transform.SetParent(transform);
+                        cell.hasTile = true;
+
+                    }
                 }
-                else
+            }
+        }
+        else if (curMapType is CustomMap customMap)
+        {
+            if (customMap.customTileSets.Count > 0)
+            {
+                for (int x = 0; x < customMap.customTileSets.Count; x++)
                 {
-                    List<Cell> emptyNoneBuildingCell = GetNoneBuildingEmptyCell();
-                    int rand = Random.Range(0, emptyNoneBuildingCell.Count);
-                    Cell cell = emptyNoneBuildingCell[rand];
+                    bool isBuilding = customMap.customTileSets[x].tile.isBuilding;
+                    GameObject prefab = customMap.customTileSets[x].tile.TilePrefab;
+                    Cell cell = grid[customMap.customTileSets[x].position.x, customMap.customTileSets[x].position.y];
                     GameObject go = Instantiate(prefab, GettWorldPosition(cell), Quaternion.identity);
                     go.transform.SetParent(transform);
                     cell.hasTile = true;
 
+                    if (isBuilding)
+                    {
+                        BuildingTile buildingTile = go.GetComponent<BuildingTile>();
+                        buildingTile.SpawnInSideBuiding(transform);
+                    }
                 }
             }
         }
     }
 
 }
-
 
 public class Cell
 {
