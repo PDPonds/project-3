@@ -33,8 +33,20 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public MapTypeSO curMapSelect;
     [HideInInspector] public Vector3 playerSpawnPoint;
 
+    [Header("===== Distance =====")]
+    [Header("- Target")]
+    [SerializeField] Vector2Int min_max_target_distance;
+    public int currentTargetDistance;
+    [Header("- Tile")]
+    [SerializeField] Vector2Int min_max_tile_distance;
+    [HideInInspector] public int currentMapDistanceOnSelect;
+    [HideInInspector] public int currentDistance;
+
     private void Start()
     {
+        RandomDistance();
+        currentDistance = 0;
+
         SwitchPhase(GamePhase.SelectMap);
     }
 
@@ -209,6 +221,20 @@ public class GameManager : Singleton<GameManager>
         }
 
         return result;
+    }
+
+    #endregion
+
+    #region Target Distance
+
+    public void RandomDistance()
+    {
+        currentTargetDistance = UnityEngine.Random.Range(min_max_target_distance.x, min_max_target_distance.y);
+    }
+
+    public int GenerateTileDistance()
+    {
+        return UnityEngine.Random.Range(min_max_tile_distance.x, min_max_tile_distance.y);
     }
 
     #endregion

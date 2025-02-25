@@ -61,6 +61,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] GameObject previousMapPrefab;
     [SerializeField] GameObject selectMapPrefab;
     [SerializeField] GameObject selectMapLinePrefab;
+    [SerializeField] TextMeshProUGUI distanceText;
     [Header("===== Throwing Item =====")]
     [SerializeField] Transform throwingArea;
     MeshRenderer throwingAreaMeshRen;
@@ -469,6 +470,7 @@ public class UIManager : Singleton<UIManager>
         selectMapPanel.gameObject.SetActive(true);
         driveButton.interactable = false;
         UpdateSelectMapInfo();
+        UpdateDistanceText();
     }
 
     public void HideSelectMap()
@@ -518,7 +520,21 @@ public class UIManager : Singleton<UIManager>
         {
             MapGenerator.Instance.GenerateMap(GameManager.Instance.curMapSelect);
             MapGenerator.Instance.previousMap.Insert(0, GameManager.Instance.curMapSelect);
+            GameManager.Instance.currentDistance += GameManager.Instance.currentMapDistanceOnSelect;
+            GameManager.Instance.currentMapDistanceOnSelect = 0;
             GameManager.Instance.SwitchPhase(GamePhase.GameStart);
+        }
+    }
+
+    public void UpdateDistanceText()
+    {
+        if (GameManager.Instance.currentMapDistanceOnSelect <= 0)
+        {
+            distanceText.text = $"{GameManager.Instance.currentDistance} / {GameManager.Instance.currentTargetDistance} kg.";
+        }
+        else
+        {
+            distanceText.text = $"{GameManager.Instance.currentDistance}(+ {GameManager.Instance.currentMapDistanceOnSelect}) / {GameManager.Instance.currentTargetDistance} kg.";
         }
     }
 
