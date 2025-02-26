@@ -20,7 +20,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Transform playerStatus_HandSlot_1_Border;
     [SerializeField] Transform playerStatus_HandSlot_2_Border;
     [Header("- Day")]
-    [SerializeField] TextMeshProUGUI dayText;
+    [SerializeField] TextMeshProUGUI dayTextOnPlayerStatus;
     [Header("- Coin")]
     [SerializeField] TextMeshProUGUI coinText;
     [Header("===== Interactive =====")]
@@ -62,6 +62,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] GameObject selectMapPrefab;
     [SerializeField] GameObject selectMapLinePrefab;
     [SerializeField] TextMeshProUGUI distanceText;
+    [SerializeField] TextMeshProUGUI dayTextOnSelectMap;
     [Header("===== Throwing Item =====")]
     [SerializeField] Transform throwingArea;
     MeshRenderer throwingAreaMeshRen;
@@ -124,6 +125,7 @@ public class UIManager : Singleton<UIManager>
     {
         playerStatusPanel.gameObject.SetActive(true);
         UpdatePlayerStatus();
+        UpdateDayOnPlayerStatus();
     }
 
     public void HidePlayerStatusPanel()
@@ -471,6 +473,7 @@ public class UIManager : Singleton<UIManager>
         driveButton.interactable = false;
         UpdateSelectMapInfo();
         UpdateDistanceText();
+        UpdateDayOnSelectMap();
     }
 
     public void HideSelectMap()
@@ -487,15 +490,37 @@ public class UIManager : Singleton<UIManager>
 
     void InitSelectMap()
     {
-        List<MapTypeSO> maps = MapGenerator.Instance.RandomMap(2);
-        if (maps.Count > 0)
+        if (GameManager.Instance.currentDistance <= 0)
         {
-            MapTypeSO map_1 = maps[0];
-            MapTypeSO map_2 = maps[1];
+            CustomMap map = MapGenerator.Instance.RandomStartMap();
+            if (map != null)
+            {
+                GameObject obj = Instantiate(selectMapPrefab, previousMapAndSelectMapParent);
+                SelectMapPrefab select = obj.GetComponent<SelectMapPrefab>();
+                select.Setup(map);
+            }
+        }
+        else if (MapGenerator.Instance.IsObjectiveDay(GameManager.Instance.curDay, GameManager.Instance.curTimeOfDay, out CustomMap map))
+        {
+            if (map != null)
+            {
+                GameObject obj = Instantiate(selectMapPrefab, previousMapAndSelectMapParent);
+                SelectMapPrefab select = obj.GetComponent<SelectMapPrefab>();
+                select.Setup(map);
+            }
+        }
+        else
+        {
+            List<MapTypeSO> maps = MapGenerator.Instance.RandomMap(2);
+            if (maps.Count > 0)
+            {
+                MapTypeSO map_1 = maps[0];
+                MapTypeSO map_2 = maps[1];
 
-            GameObject obj = Instantiate(selectMapPrefab, previousMapAndSelectMapParent);
-            SelectMapPrefab select = obj.GetComponent<SelectMapPrefab>();
-            select.Setup(map_1, map_2);
+                GameObject obj = Instantiate(selectMapPrefab, previousMapAndSelectMapParent);
+                SelectMapPrefab select = obj.GetComponent<SelectMapPrefab>();
+                select.Setup(map_1, map_2);
+            }
         }
     }
 
@@ -541,10 +566,16 @@ public class UIManager : Singleton<UIManager>
     #endregion
 
     #region Day
-    public void UpdateDay()
+    public void UpdateDayOnPlayerStatus()
     {
-        dayText.text = $"Day {GameManager.Instance.curDay}";
+        dayTextOnPlayerStatus.text = $"Day {GameManager.Instance.curDay} ({GameManager.Instance.curTimeOfDay})";
     }
+
+    public void UpdateDayOnSelectMap()
+    {
+        dayTextOnSelectMap.text = $"Day {GameManager.Instance.curDay} ({GameManager.Instance.curTimeOfDay})";
+    }
+
     #endregion
 
     #region Coin

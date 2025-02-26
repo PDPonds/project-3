@@ -14,6 +14,9 @@ public class SelectMapPrefab : MonoBehaviour
 
     public void Setup(MapTypeSO mapTypeSO_1, MapTypeSO mapTypeSO_2)
     {
+        map_1.gameObject.SetActive(true);
+        map_2.gameObject.SetActive(true);
+
         Image img_1 = map_1.GetComponent<Image>();
         Image img_2 = map_2.GetComponent<Image>();
 
@@ -29,6 +32,18 @@ public class SelectMapPrefab : MonoBehaviour
         map_1.onClick.AddListener(() => SelectMap_1(mapTypeSO_1));
         map_2.onClick.AddListener(() => SelectMap_2(mapTypeSO_2));
 
+    }
+
+    public void Setup(MapTypeSO mapTypeSO_1)
+    {
+        map_1.gameObject.SetActive(true);
+        map_2.gameObject.SetActive(false);
+
+        Image img_1 = map_1.GetComponent<Image>();
+        map_1_Distance = GameManager.Instance.GenerateTileDistance();
+        img_1.sprite = mapTypeSO_1.mapIcon;
+        map_1_name.text = $"{mapTypeSO_1.mapName} ({map_1_Distance} kg.)";
+        map_1.onClick.AddListener(() => SelectMap_1(mapTypeSO_1));
     }
 
     void SelectMap_1(MapTypeSO map)

@@ -81,6 +81,8 @@ MonoBehaviour:
   map_1_name: {fileID: 2355756919104107796}
   map_2: {fileID: 3958453455963321254}
   map_2_name: {fileID: 5281129430129563559}
+  map_1_Distance: 0
+  map_2_Distance: 0
 --- !u!1 &492594805691085689
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,8 +175,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -309,8 +311,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

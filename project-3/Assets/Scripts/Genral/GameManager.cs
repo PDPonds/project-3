@@ -2,6 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TimeOfDay
+{
+    Morning, Afternone, Night
+}
+
 public enum GamePhase
 {
     SelectMap, GameStart, DuringGame, EndGame
@@ -15,6 +20,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject cameraPrefab;
     [Header("===== Day ======")]
+    public TimeOfDay curTimeOfDay;
     public int curDay;
     [Header("===== Player =====")]
     public InventorySO playerInventory;
@@ -151,6 +157,7 @@ public class GameManager : Singleton<GameManager>
                 }
 
                 InitCamera(transform);
+                UIManager.Instance.HidePlayerStatusPanel();
                 UIManager.Instance.ShowSelectMap();
 
                 break;
@@ -164,6 +171,13 @@ public class GameManager : Singleton<GameManager>
                 SelectHandSlot(1);
                 break;
             case GamePhase.EndGame:
+
+                NextTimeOfDay();
+                if (IsTimeOfDay(TimeOfDay.Morning))
+                {
+                    NextDay();
+                }
+
                 UIManager.Instance.HideActionDuration();
                 UIManager.Instance.HideInteractiveChoice();
                 UIManager.Instance.HideInteractiveKey();
@@ -235,6 +249,51 @@ public class GameManager : Singleton<GameManager>
     public int GenerateTileDistance()
     {
         return UnityEngine.Random.Range(min_max_tile_distance.x, min_max_tile_distance.y);
+    }
+
+    #endregion
+
+    #region Day
+
+    public void NextTimeOfDay()
+    {
+        switch (curTimeOfDay)
+        {
+            case TimeOfDay.Morning:
+                curTimeOfDay = TimeOfDay.Afternone;
+                break;
+            case TimeOfDay.Afternone:
+                curTimeOfDay = TimeOfDay.Night;
+                break;
+            case TimeOfDay.Night:
+                curTimeOfDay = TimeOfDay.Morning;
+                break;
+        }
+    }
+
+    public bool IsTimeOfDay(TimeOfDay timeOfDay)
+    {
+        return curTimeOfDay == timeOfDay;
+    }
+
+    public void SetTimeOfDay(TimeOfDay timeOfDay)
+    {
+        curTimeOfDay = timeOfDay;
+    }
+
+    public void NextDay()
+    {
+        curDay++;
+    }
+
+    public void SetDay(int day)
+    {
+        curDay = day;
+    }
+
+    public bool IsDay(int day)
+    {
+        return curDay == day;
     }
 
     #endregion

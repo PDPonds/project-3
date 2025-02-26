@@ -312,6 +312,9 @@ public class PlayerManager : MonoBehaviour, IDamageable
     public void Death()
     {
         Debug.Log("Death");
+        //if dead at objective map the day will set to 1 day before at morning time.
+        //random new target distance.
+        //reset current distance.
     }
 
 
