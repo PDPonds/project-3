@@ -377,7 +377,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 296cee72d8d90144e94079ca06bf1e50, type: 2}
   objectiveMaps:
   - objectiveMap: {fileID: 11400000, guid: 296cee72d8d90144e94079ca06bf1e50, type: 2}
-    objectiveDay: 4
+    objectiveDay: 1
+    objectiveTimeOfDay: 2
   endMapType: {fileID: 11400000, guid: 296cee72d8d90144e94079ca06bf1e50, type: 2}
 --- !u!1 &437446672533134641
 GameObject:
@@ -965,7 +966,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 40, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &4297489626021934876
 MonoBehaviour:
@@ -3102,7 +3103,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3722714863162804141
 RectTransform:
   m_ObjectHideFlags: 0

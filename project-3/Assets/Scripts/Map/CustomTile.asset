@@ -54,7 +54,7 @@ MonoBehaviour:
   - isRoad: 0
     YRotation: 0
     isFourWay: 0
-    isSpawnPoint: 0
+    isSpawnPoint: 1
     exitPoint: 0
     exitPointRotation: 0
     position: {x: 2, y: 1}

@@ -7,7 +7,7 @@ public class MapGenerator : Singleton<MapGenerator>
     GameObject curMap;
 
     public MapTypeSO[] allMapType;
-    [HideInInspector] public List<MapTypeSO> previousMap = new List<MapTypeSO>();
+    [HideInInspector] public List<previousMapSlot> previousMap = new List<previousMapSlot>();
 
     [Header("===== Map Prefab =====")]
     [SerializeField] GameObject mapPrefab;
@@ -84,4 +84,13 @@ public class ObjectiveMapSlot
     public CustomMap objectiveMap;
     public int objectiveDay;
     public TimeOfDay objectiveTimeOfDay;
+}
+
+
+[Serializable]
+public class previousMapSlot
+{
+    public MapTypeSO map_1;
+    public MapTypeSO map_2;
+    public MapTypeSO selectMap;
 }

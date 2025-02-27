@@ -63,6 +63,10 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] GameObject selectMapLinePrefab;
     [SerializeField] TextMeshProUGUI distanceText;
     [SerializeField] TextMeshProUGUI dayTextOnSelectMap;
+
+    MapTypeSO select_1;
+    MapTypeSO select_2;
+
     [Header("===== Throwing Item =====")]
     [SerializeField] Transform throwingArea;
     MeshRenderer throwingAreaMeshRen;
@@ -471,6 +475,10 @@ public class UIManager : Singleton<UIManager>
     {
         selectMapPanel.gameObject.SetActive(true);
         driveButton.interactable = false;
+
+        select_1 = null;
+        select_2 = null;
+
         UpdateSelectMapInfo();
         UpdateDistanceText();
         UpdateDayOnSelectMap();
@@ -495,6 +503,7 @@ public class UIManager : Singleton<UIManager>
             CustomMap map = MapGenerator.Instance.RandomStartMap();
             if (map != null)
             {
+                select_1 = map;
                 GameObject obj = Instantiate(selectMapPrefab, previousMapAndSelectMapParent);
                 SelectMapPrefab select = obj.GetComponent<SelectMapPrefab>();
                 select.Setup(map);
@@ -504,6 +513,7 @@ public class UIManager : Singleton<UIManager>
         {
             if (map != null)
             {
+                select_1 = map;
                 GameObject obj = Instantiate(selectMapPrefab, previousMapAndSelectMapParent);
                 SelectMapPrefab select = obj.GetComponent<SelectMapPrefab>();
                 select.Setup(map);
@@ -516,6 +526,9 @@ public class UIManager : Singleton<UIManager>
             {
                 MapTypeSO map_1 = maps[0];
                 MapTypeSO map_2 = maps[1];
+
+                select_1 = map_1;
+                select_2 = map_2;
 
                 GameObject obj = Instantiate(selectMapPrefab, previousMapAndSelectMapParent);
                 SelectMapPrefab select = obj.GetComponent<SelectMapPrefab>();
@@ -531,10 +544,19 @@ public class UIManager : Singleton<UIManager>
             for (int i = 0; i < MapGenerator.Instance.previousMap.Count; i++)
             {
                 Instantiate(selectMapLinePrefab, previousMapAndSelectMapParent);
-                MapTypeSO map = MapGenerator.Instance.previousMap[i];
-                GameObject obj = Instantiate(previousMapPrefab, previousMapAndSelectMapParent);
-                PreviousMapPrefab previousMap = obj.GetComponent<PreviousMapPrefab>();
-                previousMap.Setup(map);
+                MapTypeSO map_1 = MapGenerator.Instance.previousMap[i].map_1;
+                MapTypeSO map_2 = MapGenerator.Instance.previousMap[i].map_2;
+                MapTypeSO selectMap = MapGenerator.Instance.previousMap[i].selectMap;
+                GameObject obj = Instantiate(selectMapPrefab, previousMapAndSelectMapParent);
+                SelectMapPrefab select = obj.GetComponent<SelectMapPrefab>();
+                if (map_2 != null)
+                {
+                    select.SetupPreviousMap(map_1, map_2, selectMap);
+                }
+                else
+                {
+                    select.SetupPreviousMap(map_1);
+                }
             }
         }
     }
@@ -544,7 +566,12 @@ public class UIManager : Singleton<UIManager>
         if (GameManager.Instance.curMapSelect != null)
         {
             MapGenerator.Instance.GenerateMap(GameManager.Instance.curMapSelect);
-            MapGenerator.Instance.previousMap.Insert(0, GameManager.Instance.curMapSelect);
+
+            previousMapSlot previousMapSlot = new previousMapSlot();
+            previousMapSlot.map_1 = select_1;
+            previousMapSlot.map_2 = select_2;
+            previousMapSlot.selectMap = GameManager.Instance.curMapSelect;
+            MapGenerator.Instance.previousMap.Insert(0, previousMapSlot);
             GameManager.Instance.currentDistance += GameManager.Instance.currentMapDistanceOnSelect;
             GameManager.Instance.currentMapDistanceOnSelect = 0;
             GameManager.Instance.SwitchPhase(GamePhase.GameStart);
